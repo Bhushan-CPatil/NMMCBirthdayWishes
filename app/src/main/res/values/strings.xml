@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">QC And Birthday Wishes (V-4.1)</string>
+    <string name="app_city"></string>
+    <string name="sync_app">Sync</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="channel_name">Fetching Data From Server Please Wait</string>
+    <string name="channel_description">Fetching Data From Server Please Wait</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_report">Daily QC Report</string>
+    <string name="action_report2">QC Rep. Response Wise</string>
+    <string name="search">Search Voter</string>
+    <string name="birthday">Birthday Wishes</string>
+    <string name="qcapp">QC With Site Name</string>
+    <string name="powerdby">All right reserved Ornet Technology PVT. LTD.</string>
+    <string name="action_logout">Logout</string>
+    <string name="mqcapp">QC With Ward No.</string>
+    <string name="imageupload">Image Upload</string>
+    <string name="iconnapp">I-Connect</string>
+</resources>

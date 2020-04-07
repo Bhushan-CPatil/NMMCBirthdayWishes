@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="controlroom.kalyan24.app.activity.MainActivity">
+
+    <item
+        android:id="@+id/sendpdf"
+        android:icon="@drawable/ic_pdf"
+        app:showAsAction="always"
+        android:title="Send PDF To Whatsapp." />
+
+    <item
+        android:id="@+id/sendwhatsapp"
+        android:icon="@drawable/ic_whatsappsvg"
+        app:showAsAction="always"
+        android:title="Send SMS To Whatsapp." />
+
+</menu>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:id="@+id/lin1"
+    android:padding="10dp" >
+
+    <!-- To display picture taken -->
+
+    <ImageView
+        android:id="@+id/imgPreview"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:visibility="gone"
+        android:layout_margin="15dp"
+        />
+
+    <!-- Videoview to preview recorded video
+    <VideoView
+        android:id="@+id/videoPreview"
+        android:layout_width="fill_parent"
+        android:layout_height="400dp"
+        android:visibility="gone"
+        android:layout_marginTop="15dp"/>-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5"
+        android:orientation="horizontal"
+        >
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="4"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center"
+        android:paddingStart="10dp"
+        android:digits="0123456789,"
+        android:clickable="false"
+        android:background="@drawable/ed_border"
+        android:hint="Enter Ward Number"
+        android:id="@+id/ward"
+        />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:id="@+id/addmore"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/ic_add_circle_outline_black_24dp"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="@dimen/layout_margin_8"
+        android:text="Upload Image"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="20dp"/>
+
+</LinearLayout>

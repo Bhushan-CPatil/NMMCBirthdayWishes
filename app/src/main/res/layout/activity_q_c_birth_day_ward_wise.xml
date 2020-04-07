@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ornettech.nmmcqcandbirthdaywishes.activity.CallingQCMainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_8"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/prabhagdet"
+            android:text="Prabhagh No. : 101 ( NMMC / 151 )"
+            android:textColor="@color/colorBlack"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="@dimen/layout_margin_8"
+        android:layout_marginStart="@dimen/layout_margin_8"
+        android:layout_marginBottom="@dimen/layout_margin_8"
+        android:weightSum="10.2">
+
+        <TextView
+            android:id="@+id/bdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:layout_gravity="center"
+            android:textColor="@color/colorBlack"
+            android:text="Birth days of Date - 11-11-2019"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"/>
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:layout_gravity="center"
+            android:textColor="@color/colorBlack"
+            android:text="Status : Pending"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_marginEnd="@dimen/layout_margin_8"
+        android:layout_marginStart="@dimen/layout_margin_8"
+        android:layout_marginBottom="@dimen/layout_margin_8"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:textColor="@color/colorBlack"
+            android:gravity="left"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:id="@+id/birthdayscnt"
+            android:textColor="@color/colorBlack"
+            android:gravity="right"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="@dimen/layout_margin_5"
+        android:layout_marginLeft="@dimen/layout_margin_5"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/error"
+            android:textColor="@color/colorLightRed"
+            android:gravity="center"
+            android:text="NO RECORD FOUND...."
+            android:layout_margin="@dimen/layout_margin_10"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wardlist"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/adapter__birthday_list"
+            android:scrollbars="vertical"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+</LinearLayout>

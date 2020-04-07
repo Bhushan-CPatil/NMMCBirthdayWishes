@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/relativeReport"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/calendar_view"
+        android:background="@color/colorWhite">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin"
+            android:layout_marginTop="@dimen/layout_margin"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/layout_margin">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textViewDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_margin"
+                    android:text="18th Dec, 2017"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewDate"
+                    android:padding="@dimen/layout_margin"
+                    android:scrollbarStyle="insideOverlay" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+</FrameLayout>

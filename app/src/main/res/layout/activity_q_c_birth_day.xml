@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ornettech.nmmcqcandbirthdaywishes.activity.CallingQCMainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/layout_margin_8"
+        android:layout_marginLeft="@dimen/layout_margin_8"
+        android:layout_marginRight="@dimen/layout_margin_8"
+        android:weightSum="10.2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/edibg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13sp"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_location"
+                tools:ignore="VectorDrawableCompat" />
+
+            <Spinner
+                android:id="@+id/electionname"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:spinnerMode="dialog"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_marginLeft="12dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/edibg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13sp"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_birthday"
+                tools:ignore="VectorDrawableCompat" />
+
+            <Spinner
+                android:id="@+id/spnstatus"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:spinnerMode="dialog"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_marginLeft="12dp" />
+        </LinearLayout>
+
+        <!--<EditText
+            android:id="@+id/todate"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/edibg"
+            android:drawableLeft="@drawable/ic_calender"
+            android:drawablePadding="15dp"
+            android:drawableTint="@color/colorPrimary"
+            android:hint="To Date"
+            android:inputType="text"
+            android:paddingLeft="14dp"
+            android:paddingTop="12dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorPrimary" />-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/layout_margin_8"
+        android:layout_marginRight="@dimen/layout_margin_8"
+        android:layout_marginTop="@dimen/_8dp"
+        android:weightSum="10.2">
+
+        <EditText
+            android:id="@+id/dob"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="6"
+            android:background="@drawable/edibg"
+            android:drawableLeft="@drawable/ic_calender"
+            android:drawablePadding="15dp"
+            android:drawableTint="@color/colorPrimary"
+            android:hint="Date"
+            android:inputType="text"
+            android:paddingLeft="14dp"
+            android:paddingTop="12dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorPrimary" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:background="@color/colorPrimary"
+            android:text="SEARCH"
+            android:id="@+id/submit"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_margin="@dimen/layout_margin_8"
+        >
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:id="@+id/genpdf"
+            android:src="@drawable/ic_pdf"
+            android:layout_gravity="center"
+            android:background="#00000000"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:id="@+id/wardcount"
+            android:layout_gravity="center"
+            android:textColor="@color/colorBlack"
+            android:gravity="left"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:id="@+id/birthdayscount"
+            android:textColor="@color/colorBlack"
+            android:layout_gravity="center"
+            android:gravity="right"
+            />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:id="@+id/wardsms"
+            android:src="@drawable/ic_whatsapp"
+            android:layout_gravity="center"
+            android:background="#00000000"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="@dimen/layout_margin_5"
+        android:layout_marginLeft="@dimen/layout_margin_5"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/error"
+            android:textColor="@color/colorLightRed"
+            android:gravity="center"
+            android:text="NO RECORD FOUND...."
+            android:layout_margin="@dimen/layout_margin_10"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wardlist"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/adapter_society_room_list"
+            android:scrollbars="vertical"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+</LinearLayout>

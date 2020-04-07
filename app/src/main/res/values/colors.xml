@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1ABC9C</color>
+    <color name="colorPrimaryDark">#1ABC9C</color>
+    <color name="colorAccent">#48C9B0</color>
+    <color name="colorDarker">#17A589</color>
+    <color name="colorLighter">#48C9B0</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorText">#464545</color>
+
+    <color name="summer">#44eebd82</color>
+    <color name="fall">#44d8d27e</color>
+    <color name="winter">#44a1c1da</color>
+    <color name="spring">#448da64b</color>
+
+    <color name="calendar_selected_day_bg">#1ABC9C</color>
+    <color name="calendar_current_day_bg">#1ABC9C</color>
+    <color name="calendar_highlighted_day_bg">#FFFFFF</color>
+    <color name="calendar_selected_range_bg">#1ABC9C</color>
+
+    <color name="aa">#aa00ff</color>
+    <color name="ab">#fd4a1d</color>
+    <color name="ac">#f9c407</color>
+    <color name="ad">#3a56f5</color>
+    <color name="ae">#02be25</color>
+    <color name="af">#fa132e</color>
+    <color name="ag">#708303</color>
+    <color name="ah">#60a7a7</color>
+    <color name="ai">#f347f9</color>
+    <color name="aj">#f56b16</color>
+    <color name="ak">#1cddfa</color>
+    <color name="al">#7118f7</color>
+    <color name="am">#6b2503</color>
+    <color name="an">#daba29</color>
+    <color name="ao">#0d7319</color>
+    <color name="ap">#8c048b</color>
+    <color name="aq">#d92007</color>
+    <color name="ar">#534b47</color>
+    <color name="as">#a5ab3e</color>
+    <color name="at">#0cd9a6</color>
+    <color name="au">#2aa3ed</color>
+    <color name="av">#b64102</color>
+    <color name="aw">#e596f7</color>
+    <color name="ax">#18ae01</color>
+    <color name="ay">#e64aec</color>
+    <color name="az">#272ee9</color>
+    <color name="colorLightRed">#FF5555</color>
+    <color name="colorveryLightRed">#FFDADA</color>
+    <color name="colorveryLightGreen">#CBFDCD</color>
+
+
+</resources>

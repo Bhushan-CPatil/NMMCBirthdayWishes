@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/cardadpt"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="@dimen/layout_margin_8"
+    app:cardElevation="@dimen/layout_margin_5"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightRed"
+        android:id="@+id/llt">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10"
+            android:background="#FFFFFF"
+            android:orientation="horizontal"
+            android:id="@+id/llt2"
+            android:paddingEnd="@dimen/layout_margin_5"
+            android:layout_marginLeft="@dimen/layout_margin_5">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="10"
+                android:layout_marginTop="@dimen/layout_margin_2"
+                android:layout_marginBottom="@dimen/layout_margin_2"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/smspreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/layout_margin_8"
+                    android:maxLines="10"
+                    android:ellipsize="end"
+                    android:textSize="15sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:weightSum="3"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:id="@+id/whatsappbtn"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:background="@color/colorPrimary"
+                        android:text="SEND TO WHATSAPP"
+                        android:layout_margin="@dimen/layout_margin_3"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
