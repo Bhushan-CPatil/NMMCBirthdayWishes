@@ -57,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
     InitializeDbTask initializeDbTask;
     private boolean doubleBackToExitPressedOnce = false;
     TextView birthdaytxt,qctxt,mqctxt,loogedinuser,imageupload,iconnect;
+    TextView round1,round2,round3;
     public LinearLayout activity_splash;
     public List<ElectionListItem> electionlist = new ArrayList<>();
     public List<String> arrayList = new ArrayList<>();
@@ -83,6 +84,9 @@ public class SplashActivity extends AppCompatActivity {
         mqctxt = findViewById(R.id.mqctxt);
         imageupload = findViewById(R.id.imageupload);
         iconnect = findViewById(R.id.iconnect);
+        round1 = findViewById(R.id.round1);
+        round2 = findViewById(R.id.round2);
+        round3 = findViewById(R.id.round3);
 
         loogedinuser.setText("Welcome "+SharedPrefManager.getInstance(SplashActivity.this).name()+".");
 
@@ -243,6 +247,97 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+        round1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                callRecordx.stopCallReceiver();
+                if (new CheckConnection(SplashActivity.this).isNetworkConnected()) {
+                    if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        if(arrayList.size()>0) {
+                            openElectionPopup("round1");
+                        }else {
+                            Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
+                            checkAndCallApi();
+                        }
+                        //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
+                    }
+                }else {
+                    Toast.makeText(SplashActivity.this,
+                            "No Active Internet Connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        round2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                callRecordx.stopCallReceiver();
+                if (new CheckConnection(SplashActivity.this).isNetworkConnected()) {
+                    if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        if(arrayList.size()>0) {
+                            openElectionPopup("round2");
+                        }else {
+                            Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
+                            checkAndCallApi();
+                        }
+                        //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
+                    }
+                }else {
+                    Toast.makeText(SplashActivity.this,
+                            "No Active Internet Connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        round3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (new CheckConnection(SplashActivity.this).isNetworkConnected()) {
+                    if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        if(arrayList.size()>0) {
+                            openElectionPopup("round3");
+                        }else {
+                            Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
+                            checkAndCallApi();
+                        }
+                    }
+                }else {
+                    Toast.makeText(SplashActivity.this,
+                            "No Active Internet Connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         imageupload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -361,6 +456,12 @@ public class SplashActivity extends AppCompatActivity {
                             startActivity(new Intent(SplashActivity.this, OtherQCSocietyList.class));
                         }else if(type.equalsIgnoreCase("iconnect")){
                             startActivity(new Intent(SplashActivity.this, IConnectQCActivity.class));
+                        }else if(type.equalsIgnoreCase("round1")){
+                            startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round1"));
+                        }else if(type.equalsIgnoreCase("round2")){
+                            startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round2"));
+                        }else if(type.equalsIgnoreCase("round3")){
+                            startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round3"));
                         }
                     }
             }

@@ -63,11 +63,11 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             app:cardCornerRadius="@dimen/_6dp"
-            app:cardElevation="@dimen/_8dp"
+            app:cardElevation="@dimen/_4dp"
             >
             <TextView
                 android:layout_width="match_parent"
@@ -86,11 +86,11 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             app:cardCornerRadius="@dimen/_6dp"
-            app:cardElevation="@dimen/_8dp"
+            app:cardElevation="@dimen/_4dp"
             >
             <TextView
                 android:layout_width="match_parent"
@@ -110,11 +110,11 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             app:cardCornerRadius="@dimen/_6dp"
-            app:cardElevation="@dimen/_8dp"
+            app:cardElevation="@dimen/_4dp"
             >
             <TextView
                 android:layout_width="match_parent"
@@ -134,11 +134,11 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             app:cardCornerRadius="@dimen/_6dp"
-            app:cardElevation="@dimen/_8dp"
+            app:cardElevation="@dimen/_4dp"
             >
             <TextView
                 android:layout_width="match_parent"
@@ -158,11 +158,83 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             app:cardCornerRadius="@dimen/_6dp"
-            app:cardElevation="@dimen/_8dp"
+            app:cardElevation="@dimen/_4dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/round1"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:text="@string/round1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:cardElevation="@dimen/_4dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/round2"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:text="@string/round2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:cardElevation="@dimen/_4dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/round3"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:text="@string/round3"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:cardElevation="@dimen/_4dp"
             >
             <TextView
                 android:layout_width="match_parent"
@@ -182,10 +254,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:textAlignment="center"
             android:text="@string/powerdby"
-            android:gravity="bottom"
-            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
             android:textAppearance="?android:attr/textAppearance"
             android:textColor="@color/colorLightRed"
             android:textStyle="bold"/>

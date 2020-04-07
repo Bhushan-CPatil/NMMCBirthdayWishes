@@ -398,5 +398,14 @@ public interface APIService {
             @Field("isdeactive") String status
     );
 
+    @FormUrlEncoded
+    @POST("getSocietyListOfRoundsQC.php")
+    Call<SocRoomWiseResponse> getSocietyListOfRoundsQC(
+            @Field("elecname") String elecname,
+            @Field("wardno") String wardno,
+            @Field("callingresponse") String callingresponse,
+            @Field("roundcnt") String round
+    );
+
 }
 

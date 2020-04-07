@@ -13,9 +13,12 @@
     <string name="search">Search Voter</string>
     <string name="birthday">Birthday Wishes</string>
     <string name="qcapp">QC With Site Name</string>
-    <string name="powerdby">All right reserved Ornet Technology PVT. LTD.</string>
+    <string name="powerdby">All right reserved ORNET Technology PVT. LTD.</string>
     <string name="action_logout">Logout</string>
     <string name="mqcapp">QC With Ward No.</string>
     <string name="imageupload">Image Upload</string>
     <string name="iconnapp">I-Connect</string>
+    <string name="round1">QC Round 1</string>
+    <string name="round2">QC Round 2</string>
+    <string name="round3">QC Round 3</string>
 </resources>

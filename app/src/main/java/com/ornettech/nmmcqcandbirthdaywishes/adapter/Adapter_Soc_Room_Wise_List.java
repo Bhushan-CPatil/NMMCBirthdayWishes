@@ -15,6 +15,7 @@ package com.ornettech.nmmcqcandbirthdaywishes.adapter;
         import com.ornettech.nmmcqcandbirthdaywishes.activity.SocietyWIseVoterDet;
         import com.ornettech.nmmcqcandbirthdaywishes.activity.SocietyWIseVoterDetIConnectQC;
         import com.ornettech.nmmcqcandbirthdaywishes.activity.SocietyWIseVoterDetOtherQC;
+        import com.ornettech.nmmcqcandbirthdaywishes.activity.SocietyWIseVoterDetRoundQC;
         import com.ornettech.nmmcqcandbirthdaywishes.model.SocietyRoomWiseQCListPojoItem;
         import com.ornettech.nmmcqcandbirthdaywishes.model.VoterCallingQCPojoItem;
 
@@ -96,6 +97,16 @@ public class Adapter_Soc_Room_Wise_List extends RecyclerView.Adapter<RecyclerVie
                 }else if(flg.equalsIgnoreCase("IConnect")){
                     Intent intent = new Intent(mycontext, SocietyWIseVoterDetIConnectQC.class);
                     intent.putExtra("qcres", msgres);
+                    intent.putExtra("ward", spinsitename);
+                    intent.putExtra("sublocation_cd", model.getSubLocationCd());
+                    intent.putExtra("society_name", model.getSocietyName());
+                    intent.putExtra("survey_soc_cd", model.getSurveySocietyCd());
+                    intent.putExtra("roomcnt", model.getRoomcnt());
+                    mycontext.startActivity(intent);
+                }else if(flg.contains("round")){
+                    Intent intent = new Intent(mycontext, SocietyWIseVoterDetRoundQC.class);
+                    intent.putExtra("qcres", msgres);
+                    intent.putExtra("roundno", flg);
                     intent.putExtra("ward", spinsitename);
                     intent.putExtra("sublocation_cd", model.getSubLocationCd());
                     intent.putExtra("society_name", model.getSocietyName());

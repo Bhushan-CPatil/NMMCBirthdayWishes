@@ -23,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SocietyWIseVoterDetIConnectQC"></activity>
+        <activity android:name=".activity.SocietyWIseVoterDetRoundQC"></activity>
+        <activity android:name=".activity.RoundWiseQCActivity" />
+        <activity android:name=".activity.SocietyWIseVoterDetIConnectQC" />
         <activity android:name=".activity.IConnectQCActivity" />
         <activity android:name=".activity.BirthDayPhotoUploadActivity" />
         <activity android:name=".activity.WardWiseBirthdayImageList" />
