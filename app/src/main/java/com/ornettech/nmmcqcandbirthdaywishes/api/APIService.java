@@ -407,5 +407,17 @@ public interface APIService {
             @Field("roundcnt") String round
     );
 
+
+
+    @FormUrlEncoded
+    @POST("getRoomWiseDetailedListRoundsQC_1.php")
+    Call<MainResponse> getRoomWiseDetailedListRoundsQC(
+            @Field("elecname") String elecname,
+            @Field("wardno") String ward,
+            @Field("subloccd") int subloccd,
+            @Field("callingresponse") String callingresponse,
+            @Field("roundcnt") String round
+    );
+
 }
 

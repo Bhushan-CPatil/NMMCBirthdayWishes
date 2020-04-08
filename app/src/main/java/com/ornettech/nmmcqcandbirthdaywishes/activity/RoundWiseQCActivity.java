@@ -68,7 +68,14 @@ public class RoundWiseQCActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_round_wise_q_c);
         roundno = getIntent().getStringExtra("roundno");
-        getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFFFFF'>" + SharedPrefManager.getInstance(RoundWiseQCActivity.this).getElectionName() + " " + roundno + " </font>"));
+        if(roundno.equalsIgnoreCase("round1")){
+            getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFFFFF'>" + SharedPrefManager.getInstance(RoundWiseQCActivity.this).getElectionName() + " Round 1 </font>"));
+        }else if(roundno.equalsIgnoreCase("round2")){
+            getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFFFFF'>" + SharedPrefManager.getInstance(RoundWiseQCActivity.this).getElectionName() + " Round 2 </font>"));
+        }else if(roundno.equalsIgnoreCase("round3")){
+            getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFFFFF'>" + SharedPrefManager.getInstance(RoundWiseQCActivity.this).getElectionName() + " Round 3 </font>"));
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_black);
 

@@ -286,7 +286,7 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
                                                           public void onClick(View v) {
                                                               //StopCallRecording();
 
-                                                              UpdateStatusDialog(model.getVoterCd(), model.getQCResponse(), model.getAcNo(), model.getMobileNo(), model.getQCRemark());
+                                                              UpdateStatusDialog(model.getVoterCd(), model.getQCResponse(), model.getAcNo(), model.getMobileNo());
                                                           }
                                                       });
                                                   }
@@ -432,7 +432,7 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
                                                       dialog.getWindow().setAttributes(lp);
                                                   }
 
-                                                  public void UpdateStatusDialog(final String voterCd, String qcstatus, final int acNo, final String mobileNo, final String remarktxt) {
+                                                  public void UpdateStatusDialog(final String voterCd, String qcstatus, final int acNo, final String mobileNo) {
                                                       final Dialog dialog = new Dialog(SocietyWIseVoterDetIConnectQC.this);
                                                       dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                                                       dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -440,8 +440,6 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
                                                       dialog.setContentView(R.layout.edit_popup);
                                                       Button close = dialog.findViewById(R.id.closebtn);
                                                       Button update = dialog.findViewById(R.id.updatebtn);
-                                                      final EditText remark = dialog.findViewById(R.id.remark);
-                                                      remark.setText(remarktxt);
                                                       final Spinner spinresponse1 = dialog.findViewById(R.id.edtspnsmsresponse);
                                                       ArrayAdapter<String> adapterx = new ArrayAdapter<String>(SocietyWIseVoterDetIConnectQC.this, android.R.layout.simple_spinner_item, DBConnIP.arrayListToDialog);
                                                       adapterx.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -467,7 +465,7 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
                                                               builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
                                                                   @Override
                                                                   public void onClick(DialogInterface dialogx, int which) {
-                                                                      updateQCResponse(dialog, spinresponse1.getSelectedItem().toString().trim(), voterCd, acNo, mobileNo,remark.getText().toString());
+                                                                      updateQCResponse(dialog, spinresponse1.getSelectedItem().toString().trim(), voterCd, acNo, mobileNo);
                                                                       //dialog.dismiss();
                                                                   }
                                                               });
@@ -549,7 +547,7 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
         });
     }
 
-    public void updateQCResponse(final Dialog dialog, final String selspinresponse, String selvotercd, final int ac_no, final String mobileno, final String rmk) {
+    public void updateQCResponse(final Dialog dialog, final String selspinresponse, String selvotercd, final int ac_no, final String mobileno) {
         //DBConnIP.updateQCResponse_status = false;
         StopCallRecording();
         deleteFileName = "";
@@ -562,7 +560,7 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
         }
 
         new SocietyWIseVoterDetIConnectQC.UploadFileToServer().execute(selvotercd, mobileno, sharedelectionname, Integer.toString(ac_no),
-                intsite, SharedPrefManager.getInstance(SocietyWIseVoterDetIConnectQC.this).username(), selspinresponse, filePath, rmk);
+                intsite, SharedPrefManager.getInstance(SocietyWIseVoterDetIConnectQC.this).username(), selspinresponse, filePath);
         dialog.dismiss();
         /*final ProgressDialog progressBar1 = new ProgressDialog(SocietyWIseVoterDetOtherQC.this);
         progressBar1.setCancelable(false);
@@ -790,11 +788,11 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return uploadFile(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
+            return uploadFile(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
         }
 
         @SuppressWarnings("deprecation")
-        private String uploadFile(String votercd, String mobileno, String elecname, String acno, String intsite, String username, String callingresponse, String filePath, String remark) {
+        private String uploadFile(String votercd, String mobileno, String elecname, String acno, String intsite, String username, String callingresponse, String filePath) {
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
@@ -818,7 +816,6 @@ public class SocietyWIseVoterDetIConnectQC  extends AppCompatActivity {
                 entity.addPart("wardno", new StringBody(intsite));
                 entity.addPart("username", new StringBody(username));
                 entity.addPart("callstatus", new StringBody(callingresponse));
-                entity.addPart("remark", new StringBody(remark));
 
                 if(filePath != null && !filePath.equalsIgnoreCase("")) {
                     deleteFileName = filePath;
