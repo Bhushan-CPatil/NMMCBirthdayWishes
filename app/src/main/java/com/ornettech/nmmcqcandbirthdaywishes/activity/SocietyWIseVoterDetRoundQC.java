@@ -776,7 +776,7 @@ public class SocietyWIseVoterDetRoundQC extends AppCompatActivity {
             progressBar = new ProgressDialog(SocietyWIseVoterDetRoundQC.this);
             progressBar.setCancelable(false);
             progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressBar.setMessage("Uploading data to server.....(0 %)");
+            progressBar.setMessage("Uploading data to server (0 %)");
             progressBar.show();
             //progressDialoge.show();
             //progressBar.setProgress(0);
@@ -788,7 +788,7 @@ public class SocietyWIseVoterDetRoundQC extends AppCompatActivity {
             // Making progress bar visible
             //progressBar.setVisibility(View.VISIBLE);
             // updating progress bar value
-            progressBar.setMessage("Uploading data to server.....("+progress[0]+" %)");
+            progressBar.setMessage("Uploading data to server ("+progress[0]+" %)");
             // updating percentage value
             //txtPercentage.setText(String.valueOf(progress[0]) + "%");
         }
@@ -803,7 +803,7 @@ public class SocietyWIseVoterDetRoundQC extends AppCompatActivity {
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(RetrofitClient.BASE_URL + "updateCallingIConnectQC_WithAudio.php");
+            HttpPost httppost = new HttpPost(RetrofitClient.BASE_URL + "updateCallingRoundQC_WithAudio.php");
 
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -823,6 +823,7 @@ public class SocietyWIseVoterDetRoundQC extends AppCompatActivity {
                 entity.addPart("wardno", new StringBody(intsite));
                 entity.addPart("username", new StringBody(username));
                 entity.addPart("callstatus", new StringBody(callingresponse));
+                entity.addPart("roundcnt", new StringBody(roundno));
 
                 if(filePath != null && !filePath.equalsIgnoreCase("")) {
                     deleteFileName = filePath;
