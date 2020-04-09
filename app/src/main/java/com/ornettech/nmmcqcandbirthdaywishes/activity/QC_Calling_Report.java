@@ -120,6 +120,9 @@ public class QC_Calling_Report extends AppCompatActivity {
 
         arrayList2.add("QC Calling");
         arrayList2.add("Birthday Calling");
+        arrayList2.add("Round 1 Calling");
+        arrayList2.add("Round 2 Calling");
+        arrayList2.add("Round 3 Calling");
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(QC_Calling_Report.this, android.R.layout.simple_spinner_item, arrayList2);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -171,8 +174,14 @@ public class QC_Calling_Report extends AppCompatActivity {
         if(sitelist.size() > 0 ){
             if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("QC Calling")) {
                 reporttype = "QC";
-            }else{
+            }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Birthday Calling")) {
                 reporttype = "BD";
+            }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Round 1 Calling")) {
+                reporttype = "R1";
+            }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Round 2 Calling")) {
+                reporttype = "R2";
+            }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Round 3 Calling")) {
+                reporttype = "R3";
             }
             callApi(repdate.getText().toString(), spnsitename.getSelectedItem().toString().trim());
         }else{
@@ -255,13 +264,19 @@ public class QC_Calling_Report extends AppCompatActivity {
                     }
 
                     sb.append("*Executive Name* : "+SharedPrefManager.getInstance(QC_Calling_Report.this).name()+" \n");
-                    if(reporttype.equalsIgnoreCase("QC")) {
+                    if(reporttype.equalsIgnoreCase("QC")
+                            || reporttype.equalsIgnoreCase("R1")
+                            || reporttype.equalsIgnoreCase("R2")
+                            || reporttype.equalsIgnoreCase("R3")) {
                         sb.append("*Survey Date* : " + concateDate.toString() + " \n");
                     }
                     sb.append("*Calling Date* : "+repdate+" \n");
                     sb.append("*Ward No.* : "+concateWard.toString()+" \n");
                     sb.append("*Site Name* : "+concateSiteName.toString()+" \n");
-                    if(reporttype.equalsIgnoreCase("QC")) {
+                    if(reporttype.equalsIgnoreCase("QC")
+                            || reporttype.equalsIgnoreCase("R1")
+                            || reporttype.equalsIgnoreCase("R2")
+                            || reporttype.equalsIgnoreCase("R3")) {
                         sb.append("*Data Call QC* : \n");
                     }else{
                         sb.append("*Data Birthday Calls* : \n");

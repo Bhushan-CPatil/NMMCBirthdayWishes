@@ -133,8 +133,14 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                         String selreptype = spinreptype.getSelectedItem().toString();
                         if(selreptype.equalsIgnoreCase("QC Calling")){
                             selreptype = "QC";
-                        }else{
+                        }else if(selreptype.equalsIgnoreCase("Birthday Calling")) {
                             selreptype = "BD";
+                        }else if(selreptype.equalsIgnoreCase("Round 1 Calling")) {
+                            selreptype = "R1";
+                        }else if(selreptype.equalsIgnoreCase("Round 2 Calling")) {
+                            selreptype = "R2";
+                        }else if(selreptype.equalsIgnoreCase("Round 3 Calling")) {
+                            selreptype = "R3";
                         }
 
                         callAPI(SharedPrefManager.getInstance(QCResponseWiseReportActivity.this).username(),
@@ -196,6 +202,9 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
 
         arrayListRep.add("QC Calling");
         arrayListRep.add("Birthday Calling");
+        arrayListRep.add("Round 1 Calling");
+        arrayListRep.add("Round 2 Calling");
+        arrayListRep.add("Round 3 Calling");
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(QCResponseWiseReportActivity.this, android.R.layout.simple_spinner_item, arrayListRep);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
