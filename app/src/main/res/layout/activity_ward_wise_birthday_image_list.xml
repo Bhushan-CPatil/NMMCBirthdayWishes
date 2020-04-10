@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ornettech.nmmcqcandbirthdaywishes.activity.WardWiseBirthdayImageList">
+    tools:context="com.ornettech.qcandbirthdaywishes.activity.WardWiseBirthdayImageList">
 
     <LinearLayout
         android:layout_width="match_parent"

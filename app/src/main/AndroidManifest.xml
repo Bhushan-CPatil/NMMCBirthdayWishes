@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ornettech.nmmcqcandbirthdaywishes">
+    package="com.ornettech.qcandbirthdaywishes">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -23,30 +23,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SocietyWIseVoterDetRoundQC"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.SocietyWIseVoterDetRoundQC"
             android:screenOrientation="locked" ></activity>
-        <activity android:name=".activity.RoundWiseQCActivity"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.RoundWiseQCActivity"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.SocietyWIseVoterDetIConnectQC"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.SocietyWIseVoterDetIConnectQC"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.IConnectQCActivity"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.IConnectQCActivity"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.BirthDayPhotoUploadActivity"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.BirthDayPhotoUploadActivity"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.WardWiseBirthdayImageList"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.WardWiseBirthdayImageList"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.SocietyWIseVoterDetOtherQC"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.SocietyWIseVoterDetOtherQC"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.OtherQCSocietyList"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.OtherQCSocietyList"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.QCResponseWiseReportActivity"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.QCResponseWiseReportActivity"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.QCBirthDayWardWiseActivity"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.QCBirthDayWardWiseActivity"
             android:screenOrientation="locked"  />
-        <activity android:name=".activity.QCBirthDayActivity"
+        <activity android:name="com.ornettech.qcandbirthdaywishes.activity.QCBirthDayActivity"
             android:screenOrientation="locked"  />
         <activity
-            android:name=".activity.LoginAcivity"
+            android:name="com.ornettech.qcandbirthdaywishes.activity.LoginAcivity"
             android:screenOrientation="locked"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -56,13 +56,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.QC_Calling_Report"
+            android:name="com.ornettech.qcandbirthdaywishes.activity.QC_Calling_Report"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.SocietyWIseVoterDet"
+            android:name="com.ornettech.qcandbirthdaywishes.activity.SocietyWIseVoterDet"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.SocietyListOfQC"
+            android:name="com.ornettech.qcandbirthdaywishes.activity.SocietyListOfQC"
             android:screenOrientation="locked" />
 
         <uses-library
@@ -70,15 +70,15 @@
             android:required="false" />
 
         <activity
-            android:name=".activity.CallingQCMainActivity"
+            android:name="com.ornettech.qcandbirthdaywishes.activity.CallingQCMainActivity"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.ornettech.qcandbirthdaywishes.activity.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="locked"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.ornettech.qcandbirthdaywishes.activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="locked"
             android:theme="@style/AppTheme.NoActionBar" />
