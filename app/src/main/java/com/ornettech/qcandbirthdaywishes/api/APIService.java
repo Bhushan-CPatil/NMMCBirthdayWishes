@@ -3,6 +3,7 @@ package com.ornettech.qcandbirthdaywishes.api;
 import com.ornettech.qcandbirthdaywishes.adapter.DefaultResponse;
 import com.ornettech.qcandbirthdaywishes.model.BirthdayInWardResponse;
 import com.ornettech.qcandbirthdaywishes.model.CallingQCMainResponse;
+import com.ornettech.qcandbirthdaywishes.model.ClientCallResponse;
 import com.ornettech.qcandbirthdaywishes.model.CorporateWhatsappResponse;
 import com.ornettech.qcandbirthdaywishes.model.CorporatosResponse;
 import com.ornettech.qcandbirthdaywishes.model.LoginResponse;
@@ -407,8 +408,6 @@ public interface APIService {
             @Field("roundcnt") String round
     );
 
-
-
     @FormUrlEncoded
     @POST("getRoomWiseDetailedListRoundsQC_1.php")
     Call<MainResponse> getRoomWiseDetailedListRoundsQC(
@@ -417,6 +416,14 @@ public interface APIService {
             @Field("subloccd") int subloccd,
             @Field("callingresponse") String callingresponse,
             @Field("roundcnt") String round
+    );
+
+    @FormUrlEncoded
+    @POST("ClientList.php")
+    Call<ClientCallResponse> getClientListForQC(
+            @Field("fromdate") String fromdate,
+            @Field("elecname") String elecname,
+            @Field("callingresponse") String callingresponse
     );
 
 }

@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
     ProgressDialog mProgressDialog;
     InitializeDbTask initializeDbTask;
     private boolean doubleBackToExitPressedOnce = false;
-    TextView birthdaytxt,qctxt,mqctxt,loogedinuser,imageupload,iconnect;
+    TextView birthdaytxt,qctxt,mqctxt,loogedinuser,imageupload,iconnect,clientcall;
     TextView round1,round2,round3;
     public LinearLayout activity_splash;
     public List<ElectionListItem> electionlist = new ArrayList<>();
@@ -79,6 +79,7 @@ public class SplashActivity extends AppCompatActivity {
         round1 = findViewById(R.id.round1);
         round2 = findViewById(R.id.round2);
         round3 = findViewById(R.id.round3);
+        clientcall = findViewById(R.id.clientcall);
 
         loogedinuser.setText("Welcome "+SharedPrefManager.getInstance(SplashActivity.this).name()+".");
 
@@ -230,6 +231,45 @@ public class SplashActivity extends AppCompatActivity {
                             checkAndCallApi();
                         }
                         //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
+                    }
+                }else {
+                    Toast.makeText(SplashActivity.this,
+                            "No Active Internet Connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        clientcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                callRecordx.stopCallReceiver();
+                if (new CheckConnection(SplashActivity.this).isNetworkConnected()) {
+                    if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        if(SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Review") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Admin and Other") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Manager") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Software Developer") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("CEO/Director") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Sr Manager")){
+                            if(arrayList.size()>0) {
+                                openElectionPopup("ccalling");
+                            }else {
+                                Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
+                                checkAndCallApi();
+                            }
+                        }else{
+                            Toast.makeText(SplashActivity.this, "Access is denied !", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }else {
                     Toast.makeText(SplashActivity.this,
@@ -454,6 +494,8 @@ public class SplashActivity extends AppCompatActivity {
                             startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round2"));
                         }else if(type.equalsIgnoreCase("round3")){
                             startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round3"));
+                        }else if(type.equalsIgnoreCase("ccalling")){
+                            startActivity(new Intent(SplashActivity.this, ClientCallingActivity.class));
                         }
                     }
             }

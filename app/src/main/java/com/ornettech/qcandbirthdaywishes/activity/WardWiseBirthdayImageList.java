@@ -65,7 +65,6 @@ public class WardWiseBirthdayImageList extends AppCompatActivity implements Gall
     String op="",electionname,corpcd;
     int wardno = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
