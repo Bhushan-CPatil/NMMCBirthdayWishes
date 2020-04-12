@@ -437,8 +437,8 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                       Button close = dialog.findViewById(R.id.closebtn);
                                                       Button update = dialog.findViewById(R.id.updatebtn);
                                                       final EditText r1 = dialog.findViewById(R.id.remark1);
-                                                      final EditText r2 = dialog.findViewById(R.id.remark1);
-                                                      final EditText r3 = dialog.findViewById(R.id.remark1);
+                                                      final EditText r2 = dialog.findViewById(R.id.remark2);
+                                                      final EditText r3 = dialog.findViewById(R.id.remark3);
                                                       r1.setText(remark1);
                                                       r2.setText(remark2);
                                                       r3.setText(remark3);
