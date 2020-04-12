@@ -426,5 +426,16 @@ public interface APIService {
             @Field("callingresponse") String callingresponse
     );
 
+    @FormUrlEncoded
+    @POST("updateClientRemark.php")
+    Call<DefaultResponse> updateRemark(
+            @Field("corporatorcd") int corporatorcd,
+            @Field("date") String date,
+            @Field("elecname") String sharedelectionname,
+            @Field("remark1") String r1,
+            @Field("remark2") String r2,
+            @Field("remark3") String r3,
+            @Field("username") String username
+    );
 }
 

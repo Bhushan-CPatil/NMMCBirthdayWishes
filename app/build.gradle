@@ -10,8 +10,8 @@ android {
         applicationId "com.ornettech.qcandbirthdaywishes"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 43
-        versionName "4.3"
+        versionCode 44
+        versionName "4.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -27,7 +27,7 @@ android {
             signingConfig getSigningConfig()
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    project.ext { appName = "BirthdayAppAndQC_Ver_4_3" }
+                    project.ext { appName = "BirthdayAppAndQC_Ver_4_4" }
                     def newName = output.outputFileName
                     newName = newName.replace("app-", "$project.ext.appName-")
                     newName = newName.replace("-release", "")

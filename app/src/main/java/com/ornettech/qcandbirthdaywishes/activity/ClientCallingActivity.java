@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
@@ -41,6 +42,7 @@ import android.widget.Toast;
 import com.ornettech.qcandbirthdaywishes.R;
 import com.ornettech.qcandbirthdaywishes.adapter.AdapterClientList;
 import com.ornettech.qcandbirthdaywishes.adapter.Adapter_Soc_Room_Wise_List;
+import com.ornettech.qcandbirthdaywishes.adapter.DefaultResponse;
 import com.ornettech.qcandbirthdaywishes.api.RetrofitClient;
 import com.ornettech.qcandbirthdaywishes.call.CallRecord;
 import com.ornettech.qcandbirthdaywishes.model.ClientCallResponse;
@@ -49,6 +51,7 @@ import com.ornettech.qcandbirthdaywishes.model.ResponseListPojoItem;
 import com.ornettech.qcandbirthdaywishes.model.SiteAndQCResponse;
 import com.ornettech.qcandbirthdaywishes.model.SiteNameListPojoItem;
 import com.ornettech.qcandbirthdaywishes.model.SocietyRoomWiseQCListPojoItem;
+import com.ornettech.qcandbirthdaywishes.utility.AndroidMultiPartEntity;
 import com.ornettech.qcandbirthdaywishes.utility.CheckConnection;
 import com.ornettech.qcandbirthdaywishes.utility.DBConnIP;
 import com.ornettech.qcandbirthdaywishes.utility.OuterHolder;
@@ -56,7 +59,20 @@ import com.ornettech.qcandbirthdaywishes.utility.SendSMSWhatsApp;
 import com.ornettech.qcandbirthdaywishes.utility.SharedPrefManager;
 import com.ornettech.qcandbirthdaywishes.utility.Transalator;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,11 +97,14 @@ public class ClientCallingActivity extends AppCompatActivity {
     public String sharedelectionname,filename = "";
     public RecyclerView rcyclr_list;
     CallRecord callRecordSurvey = null;
+    long totalSize = 0;
     private DatePickerDialog fromDatePickerDialog;
-    private DatePickerDialog toDatePickerDialog;
     SendSMSWhatsApp sendSMSWhatsApp = new SendSMSWhatsApp();
     private SimpleDateFormat dateFormatter,parseDate;
+    private ProgressDialog progressBar = null;
+    String deleteFileName="";
     public List<ResponseListPojoItem> responselist = new ArrayList<>();
+    String searchdate,message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,7 +307,8 @@ public class ClientCallingActivity extends AppCompatActivity {
             try {
                 startDate = dateFormatter.parse(edtfrom);
                 String newEdtFrom = parseDate.format(startDate);
-
+                searchdate = newEdtFrom;
+                message = spinmsgres.getSelectedItem().toString().trim();
                 callApi(newEdtFrom,context, spinmsgres.getSelectedItem().toString().trim());
 
             }catch (Exception e){
@@ -376,7 +396,7 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                           @Override
                                                           public void onClick(View v) {
                                                               //Log.d("new bd3------>",model.getBirthDate());
-                                                              //todo EditDialog(model.getMobileNo1(), model.getAcNo(), model.getRemark1(), model.getRemark2(), model.getRemark3());
+                                                              EditDialog(model.getCorporatorCd(), model.getSelecteddate(), model.getRemark1(), model.getRemark2(), model.getRemark3());
                                                               //Toast.makeText(ClientCallingActivity.this, "edit"+model.getFullName(), Toast.LENGTH_SHORT).show();
                                                           }
                                                       });
@@ -388,14 +408,6 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                               StartCallRecording(filename);
                                                               innerHolder.llt2.setBackgroundColor(Color.parseColor("#FFDADA"));
                                                               sendSMSWhatsApp.callMobNo(ClientCallingActivity.this, model.getMobileNo1());
-                                                              /*Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                                              callIntent.setData(Uri.parse("tel:9322554923"));
-                                                              callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                              if (ActivityCompat.checkSelfPermission(ClientCallingActivity.this, Manifest.permission.CALL_PHONE)
-                                                                      != PackageManager.PERMISSION_GRANTED) {
-                                                                  ActivityCompat.requestPermissions(ClientCallingActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
-                                                              }
-                                                              ClientCallingActivity.this.startActivity(callIntent);*/
                                                               Toast.makeText(ClientCallingActivity.this, "calling", Toast.LENGTH_SHORT).show();
                                                           }
                                                       });
@@ -411,83 +423,25 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                           @Override
                                                           public void onClick(View v) {
                                                               //StopCallRecording();
-
-                                                              //todo UpdateStatusDialog(model.getQCResponse(),  model.getMobileNo1(), model.getCorporatorCd(), model.getClientQCCd());
+                                                              UpdateStatusDialog(model.getQCResponse(), model.getCorporatorCd(), model.getSelecteddate(), model.getWardNo(), model.getClientCd(), model.getMobileNo1());
                                                           }
                                                       });
                                                   }
 
-                                                  public void EditDialog(final String voterCd, String mobileNo, final int acNo, final String newBirthDate, final String tablename, final int voterid, final String voterfname, final String votermname, final String voterlname, final String remarktxt) {
+                                                  public void EditDialog(final int corporatorcd, final String date, final String remark1, final String remark2, final String remark3) {
                                                       final Dialog dialog = new Dialog(ClientCallingActivity.this);
                                                       dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                                                       dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                                       dialog.setCancelable(false);
-                                                      dialog.setContentView(R.layout.editbirthdate);
+                                                      dialog.setContentView(R.layout.remark_edit_dialog);
                                                       Button close = dialog.findViewById(R.id.closebtn);
                                                       Button update = dialog.findViewById(R.id.updatebtn);
-                                                      final EditText fname = dialog.findViewById(R.id.fname);
-                                                      final EditText mname = dialog.findViewById(R.id.mname);
-                                                      final EditText lname = dialog.findViewById(R.id.lname);
-                                                      final EditText birthdate = dialog.findViewById(R.id.birthdate);
-                                                      final EditText mobilenumber = dialog.findViewById(R.id.mobilenumber);
-                                                      final EditText remark = dialog.findViewById(R.id.remark);
-                                                      remark.setText(remarktxt);
-                                                      //Log.d("new bd4------>",newBirthDate);
-                                                      birthdate.setText(newBirthDate);
-                                                      birthdate.setFocusable(false);
-                                                      mobilenumber.setText(mobileNo);
-                                                      fname.setText(voterfname);
-                                                      mname.setText(votermname);
-                                                      lname.setText(voterlname);
-                                                      if (voterid != 0) {
-                                                          fname.setEnabled(false);
-                                                          mname.setEnabled(false);
-                                                          lname.setEnabled(false);
-                                                          fname.setFocusable(false);
-                                                          mname.setFocusable(false);
-                                                          lname.setFocusable(false);
-                                                      } else {
-                                                          fname.setEnabled(true);
-                                                          mname.setEnabled(true);
-                                                          lname.setEnabled(true);
-                                                          fname.setFocusable(true);
-                                                          mname.setFocusable(true);
-                                                          lname.setFocusable(true);
-                                                      }
-
-                                                      birthdate.setOnClickListener(new View.OnClickListener() {
-                                                          @Override
-                                                          public void onClick(View v) {
-                                                              try {
-                                                                  int mYear, mMonth, mDay;
-                                                                  if (newBirthDate.length() > 0) {
-                                                                      DateFormat dateFormater = new SimpleDateFormat("dd-MM-yyyy");
-                                                                      Date date = dateFormater.parse(newBirthDate);
-                                                                      final Calendar cal = Calendar.getInstance();
-                                                                      cal.setTime(date);
-                                                                      mYear = cal.get(Calendar.YEAR);
-                                                                      mMonth = cal.get(Calendar.MONTH);
-                                                                      mDay = cal.get(Calendar.DAY_OF_MONTH);
-                                                                  } else {
-                                                                      final Calendar c = Calendar.getInstance();
-                                                                      mYear = c.get(Calendar.YEAR); // current year
-                                                                      mMonth = c.get(Calendar.MONTH); // current month
-                                                                      mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-                                                                  }
-                                                                  fromDatePickerDialog = new DatePickerDialog(ClientCallingActivity.this,
-                                                                          new DatePickerDialog.OnDateSetListener() {
-                                                                              @Override
-                                                                              public void onDateSet(DatePicker view, int year,
-                                                                                                    int monthOfYear, int dayOfMonth) {
-                                                                                  birthdate.setText(String.format("%02d", dayOfMonth) + "-" + String.format("%02d", (monthOfYear + 1)) + "-" + year);
-                                                                              }
-                                                                          }, mYear, mMonth, mDay);
-                                                                  fromDatePickerDialog.show();
-                                                              } catch (Exception e) {
-                                                              }
-
-                                                          }
-                                                      });
+                                                      final EditText r1 = dialog.findViewById(R.id.remark1);
+                                                      final EditText r2 = dialog.findViewById(R.id.remark1);
+                                                      final EditText r3 = dialog.findViewById(R.id.remark1);
+                                                      r1.setText(remark1);
+                                                      r2.setText(remark2);
+                                                      r3.setText(remark3);
 
                                                       close.setOnClickListener(new View.OnClickListener() {
                                                           @Override
@@ -506,39 +460,9 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                               builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
                                                                   @Override
                                                                   public void onClick(DialogInterface dialogx, int which) {
-                                                                      if (voterid != 0) {
-                                                                          // todo updateBDAndMobNo(dialog, birthdate.getText().toString().trim(), voterCd, acNo, mobilenumber.getText().toString(), tablename, voterfname, votermname, voterlname, remark.getText().toString());
-                                                                      } else {
-                                                                          String n = "", m = "", l = "";
-                                                                          n = fname.getText().toString();
-                                                                          m = mname.getText().toString();
-                                                                          l = lname.getText().toString();
-                                                                          if (n != null && n.isEmpty()) {
-                                                                              fname.setError("Voter name cannot be empty !");
-                                                                              fname.requestFocus();
-                                                                          } else if (n != null && l.isEmpty()) {
-                                                                              lname.setError("Voter surname name cannot be empty !");
-                                                                              lname.requestFocus();
-                                                                          } else {
-                                                                              if (n != null && n.trim().length() > 0)
-                                                                                  n = Transalator.convertStringFirstCharToCapital(n).trim();
 
-                                                                              if (n != null && m.trim().length() > 0)
-                                                                                  m = Transalator.convertStringFirstCharToCapital(m).trim();
+                                                                    updateRemark(dialog, corporatorcd, date, r1.getText().toString(), r2.getText().toString(), r3.getText().toString());
 
-                                                                              if (n != null && l.trim().length() > 0)
-                                                                                  l = Transalator.convertStringFirstCharToCapital(l).trim();
-
-                                                                              //todo updateBDAndMobNo(dialog, birthdate.getText().toString().trim(), voterCd, acNo, mobilenumber.getText().toString(), tablename, n, m, l, remark.getText().toString());
-                                                                          }
-
-                                    /*else if(m.isEmpty()){
-                                        mname.setError("Voter middle name cannot be empty !");
-                                        mname.requestFocus();
-                                    }*/
-                                                                      }
-
-                                                                      //dialog.dismiss();
                                                                   }
                                                               });
                                                               builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -558,7 +482,7 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                       dialog.getWindow().setAttributes(lp);
                                                   }
 
-                                                  public void UpdateStatusDialog(final String voterCd, String qcstatus, final int acNo, final String mobileNo) {
+                                                  public void UpdateStatusDialog(final String qcstatus, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile) {
                                                       final Dialog dialog = new Dialog(ClientCallingActivity.this);
                                                       dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                                                       dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -591,8 +515,7 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                               builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
                                                                   @Override
                                                                   public void onClick(DialogInterface dialogx, int which) {
-                                                                      //todo updateQCResponse(dialog, spinresponse1.getSelectedItem().toString().trim(), voterCd, acNo, mobileNo);
-                                                                      //dialog.dismiss();
+                                                                      updateQCResponse(dialog, spinresponse1.getSelectedItem().toString().trim(), corporatorcd, date, wardno, clientcd, mobile);
                                                                   }
                                                               });
                                                               builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -682,6 +605,225 @@ public class ClientCallingActivity extends AppCompatActivity {
     private void StopCallRecording() {
         if (callRecordSurvey != null) {
             callRecordSurvey.stopCallReceiver();
+        }
+    }
+
+    public void updateRemark(final Dialog dialog, final int corporatorcd, final String date, final String r1, final String r2, final String r3) {
+
+        final ProgressDialog progressBar1 = new ProgressDialog(ClientCallingActivity.this);
+        progressBar1.setCancelable(false);
+        progressBar1.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar1.setMessage("Please wait...");
+        progressBar1.show();
+        Call<DefaultResponse> call1 = RetrofitClient
+                .getInstance().getApi().updateRemark(corporatorcd, date, sharedelectionname, r1, r2, r3, SharedPrefManager.getInstance(ClientCallingActivity.this).username());
+        call1.enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call1, Response<DefaultResponse> response) {
+                DefaultResponse res = response.body();
+                progressBar1.dismiss();
+                if (!res.isError()) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ClientCallingActivity.this);
+                    builder1.setCancelable(false);
+                    builder1.setTitle("Alert ?");
+                    builder1.setMessage(res.getErrormsg());
+                    builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogx, int which) {
+                            callApi(searchdate, ClientCallingActivity.this, message);
+                        }
+                    });
+                    AlertDialog dialog3 = builder1.create();
+                    dialog3.show();
+                    dialog.dismiss();
+                } else {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ClientCallingActivity.this);
+                    builder1.setCancelable(false);
+                    builder1.setTitle("Alert ?");
+                    builder1.setMessage(res.getErrormsg());
+                    builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogx, int which) {
+                        }
+                    });
+                    AlertDialog dialog3 = builder1.create();
+                    dialog3.show();
+                    dialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call1, Throwable t) {
+                progressBar1.dismiss();
+                Toast.makeText(ClientCallingActivity.this, "Failed to update !", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void updateQCResponse(final Dialog dialog, final String selspinresponse, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile) {
+        StopCallRecording();
+        deleteFileName = "";
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SurveyCallRecords/ClientQCRecord_" + clientcd + "_" + sharedelectionname + "_" + mobile+".m4a";
+        File newfile = new File(filePath);
+        if(newfile.exists()){
+            Log.d("file exists--->","true");
+            deleteFileName = filePath;
+
+        }
+
+        new UploadFileToServer().execute(selspinresponse, Integer.toString(corporatorcd), sharedelectionname, date, Integer.toString(wardno),
+                SharedPrefManager.getInstance(ClientCallingActivity.this).username(), filePath);
+        dialog.dismiss();
+
+    }
+
+    private class UploadFileToServer extends AsyncTask<String, Integer, String> {
+        @Override
+        protected void onPreExecute() {
+            // setting progress bar to zero
+            /*progressBar = new ProgressDialog(SocietyWIseVoterDet.this);
+            progressBar.setMessage("Uploading data to server");
+            progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressBar.setIndeterminate(true);
+            progressBar.setProgress(0);
+            progressBar.show();*/
+            progressBar = new ProgressDialog(ClientCallingActivity.this);
+            progressBar.setCancelable(false);
+            progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressBar.setMessage("Uploading data to server.....(0 %)");
+            progressBar.show();
+            //progressDialoge.show();
+            //progressBar.setProgress(0);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            // Making progress bar visible
+            //progressBar.setVisibility(View.VISIBLE);
+            // updating progress bar value
+            progressBar.setMessage("Uploading data to server.....("+progress[0]+" %)");
+            // updating percentage value
+            //txtPercentage.setText(String.valueOf(progress[0]) + "%");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return uploadFile(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+        }
+
+        @SuppressWarnings("deprecation")
+        private String uploadFile(String callingresponse, String corporatorcd, String elecname, String date, String wardno, String username, String filePath) {
+            String responseString = null;
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(RetrofitClient.BASE_URL + "updateClientCallingQC.php");
+
+            try {
+                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                        new AndroidMultiPartEntity.ProgressListener() {
+                            @Override
+                            public void transferred(long num) {
+                                publishProgress((int) ((num / (float) totalSize) * 100));
+                            }
+                        });
+                //Log.d("file path", filePath);
+                // Extra parameters if you want to pass to server
+                entity.addPart("corporatorcd", new StringBody(corporatorcd));
+                entity.addPart("date", new StringBody(date));
+                entity.addPart("elecname", new StringBody(elecname));
+                entity.addPart("wardno", new StringBody(wardno));
+                entity.addPart("username", new StringBody(username));
+                entity.addPart("callstatus", new StringBody(callingresponse));
+
+                if(filePath != null && !filePath.equalsIgnoreCase("")) {
+                    deleteFileName = filePath;
+                    File sourceFile = new File(filePath);
+                    if (sourceFile.exists()) {
+                        entity.addPart("audiofile", new FileBody(sourceFile));
+                    }
+                }
+
+                totalSize = entity.getContentLength();
+                httppost.setEntity(entity);
+
+                // Making server call
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity r_entity = response.getEntity();
+
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == 200) {
+                    // Server response
+                    responseString = EntityUtils.toString(r_entity);
+                } else {
+                    responseString = "Error occurred! Http Status Code: "
+                            + statusCode;
+                }
+
+            } catch (ClientProtocolException e) {
+                responseString = e.toString();
+            } catch (IOException e) {
+                responseString = e.toString();
+            }
+            return responseString;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("----->",result);
+            progressBar.dismiss();
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                totalSize = 0;
+                if (!jsonObject.getBoolean("error")) {
+                    if(jsonObject.getString("errormsg").equalsIgnoreCase("Entry Update Successfully.")) {
+                        if (deleteFileName != null && !deleteFileName.equalsIgnoreCase("")) {
+                            File fdelete = new File(deleteFileName);
+                            if (fdelete.exists()) {
+                                if (fdelete.delete()) {
+                                    Toast.makeText(ClientCallingActivity.this, "file deleted", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ClientCallingActivity.this, "file not deleted", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(ClientCallingActivity.this, "file does not exists", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(ClientCallingActivity.this, "file path is empty", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ClientCallingActivity.this);
+                    builder1.setCancelable(false);
+                    builder1.setTitle("Alert ?");
+                    builder1.setMessage(jsonObject.getString("errormsg"));
+                    builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogx, int which) {
+                            callApi(searchdate, ClientCallingActivity.this, message);
+                        }
+                    });
+                    AlertDialog dialog3 = builder1.create();
+                    dialog3.show();
+                    //dialog.dismiss();
+                } else {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ClientCallingActivity.this);
+                    builder1.setCancelable(false);
+                    builder1.setTitle("Alert ?");
+                    builder1.setMessage(jsonObject.getString("errormsg"));
+                    builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogx, int which) {
+                        }
+                    });
+                    AlertDialog dialog3 = builder1.create();
+                    dialog3.show();
+                    //dialog.dismiss();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

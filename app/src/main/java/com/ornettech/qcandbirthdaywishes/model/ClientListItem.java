@@ -70,6 +70,17 @@ public class ClientListItem{
 	@SerializedName("Corporator_Name")
 	private String corporatorName;
 
+	@SerializedName("selecteddate")
+	private String selecteddate;
+
+	public String getSelecteddate() {
+		return selecteddate;
+	}
+
+	public void setSelecteddate(String selecteddate) {
+		this.selecteddate = selecteddate;
+	}
+
 	public void setCorporatorCd(int corporatorCd){
 		this.corporatorCd = corporatorCd;
 	}
@@ -271,7 +282,8 @@ public class ClientListItem{
 			",ac_No = '" + acNo + '\'' + 
 			",ward_No = '" + wardNo + '\'' + 
 			",corporation_Name = '" + corporationName + '\'' + 
-			",corporator_Name = '" + corporatorName + '\'' + 
+			",selecteddate = '" + selecteddate + '\'' +
+			",corporator_Name = '" + corporatorName + '\'' +
 			"}";
 		}
 }
