@@ -22,4 +22,5 @@
     <string name="round2">QC Round 2</string>
     <string name="round3">QC Round 3</string>
     <string name="clientcall">Client Calling</string>
+    <string name="logout">Logout</string>
 </resources>

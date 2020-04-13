@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
     ProgressDialog mProgressDialog;
     InitializeDbTask initializeDbTask;
     private boolean doubleBackToExitPressedOnce = false;
-    TextView birthdaytxt,qctxt,mqctxt,loogedinuser,imageupload,iconnect,clientcall;
+    TextView logout,birthdaytxt,qctxt,mqctxt,loogedinuser,imageupload,iconnect,clientcall;
     TextView round1,round2,round3;
     public LinearLayout activity_splash;
     public List<ElectionListItem> electionlist = new ArrayList<>();
@@ -70,6 +70,7 @@ public class SplashActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
+        logout = findViewById(R.id.logout);
         birthdaytxt = findViewById(R.id.birthdaytxt);
         loogedinuser = findViewById(R.id.loogedinuser);
         qctxt = findViewById(R.id.qctxt);
@@ -82,6 +83,16 @@ public class SplashActivity extends AppCompatActivity {
         clientcall = findViewById(R.id.clientcall);
 
         loogedinuser.setText("Welcome "+SharedPrefManager.getInstance(SplashActivity.this).name()+".");
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPrefManager.getInstance(SplashActivity.this).clear();
+                Intent intent = new Intent(SplashActivity.this, LoginAcivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
 
         birthdaytxt.setOnClickListener(new View.OnClickListener() {
             @Override
