@@ -6,6 +6,7 @@ import com.ornettech.qcandbirthdaywishes.model.CallingQCMainResponse;
 import com.ornettech.qcandbirthdaywishes.model.ClientCallResponse;
 import com.ornettech.qcandbirthdaywishes.model.CorporateWhatsappResponse;
 import com.ornettech.qcandbirthdaywishes.model.CorporatosResponse;
+import com.ornettech.qcandbirthdaywishes.model.KKHIResponse;
 import com.ornettech.qcandbirthdaywishes.model.LoginResponse;
 import com.ornettech.qcandbirthdaywishes.model.MainResponse;
 import com.ornettech.qcandbirthdaywishes.model.PrabhagResponse;
@@ -435,6 +436,17 @@ public interface APIService {
             @Field("remark1") String r1,
             @Field("remark2") String r2,
             @Field("remark3") String r3,
+            @Field("username") String username
+    );
+
+    @FormUrlEncoded
+    @POST("KaryakartaHitachintakList.php")
+    Call<KKHIResponse> getKaryakartaHitachintakListForQC(
+            @Field("fromdate") String fromdate,
+            @Field("elecname") String elecname,
+            @Field("callingresponse") String callingresponse,
+            @Field("usertype") String usertype,
+            @Field("Ward_No") String Ward_No,
             @Field("username") String username
     );
 }

@@ -10,10 +10,12 @@ import android.os.AsyncTask;
 import android.os.Handler;
 
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +50,8 @@ public class SplashActivity extends AppCompatActivity {
     ProgressDialog mProgressDialog;
     InitializeDbTask initializeDbTask;
     private boolean doubleBackToExitPressedOnce = false;
-    TextView logout,birthdaytxt,qctxt,mqctxt,loogedinuser,imageupload,iconnect,clientcall;
-    TextView round1,round2,round3;
+    TextView logout, birthdaytxt, qctxt, mqctxt, loogedinuser, imageupload, iconnect, clientcall, karhitcall;
+    TextView round1, round2, round3;
     public LinearLayout activity_splash;
     public List<ElectionListItem> electionlist = new ArrayList<>();
     public List<String> arrayList = new ArrayList<>();
@@ -66,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         ActionBar actionBar = getSupportActionBar();
-        if(null != actionBar){
+        if (null != actionBar) {
             actionBar.hide();
         }
 
@@ -81,8 +83,9 @@ public class SplashActivity extends AppCompatActivity {
         round2 = findViewById(R.id.round2);
         round3 = findViewById(R.id.round3);
         clientcall = findViewById(R.id.clientcall);
+        karhitcall = findViewById(R.id.karhitcall);
 
-        loogedinuser.setText("Welcome "+SharedPrefManager.getInstance(SplashActivity.this).name()+".");
+        loogedinuser.setText("Welcome " + SharedPrefManager.getInstance(SplashActivity.this).name() + ".");
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,20 +140,18 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(arrayList.size()>0) {
+                    } else {
+                        if (arrayList.size() > 0) {
                             startActivity(new Intent(SplashActivity.this, QCBirthDayActivity.class));
-                        }else {
+                        } else {
                             Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                             checkAndCallApi();
                         }
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -167,21 +168,19 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(arrayList.size()>0) {
+                    } else {
+                        if (arrayList.size() > 0) {
                             openElectionPopup("QC");
-                        }else {
+                        } else {
                             Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                             checkAndCallApi();
                         }
                         //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -198,21 +197,19 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(arrayList.size()>0) {
+                    } else {
+                        if (arrayList.size() > 0) {
                             openElectionPopup("MQC");
-                        }else {
+                        } else {
                             Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                             checkAndCallApi();
                         }
                         //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -229,21 +226,19 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(arrayList.size()>0) {
+                    } else {
+                        if (arrayList.size() > 0) {
                             openElectionPopup("iconnect");
-                        }else {
+                        } else {
                             Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                             checkAndCallApi();
                         }
                         //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -260,29 +255,56 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Review") ||
+                    } else {
+                        if (SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Review") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Admin and Other") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Manager") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Software Developer") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("CEO/Director") ||
-                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Sr Manager")){
-                            if(arrayList.size()>0) {
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Sr Manager")) {
+                            if (arrayList.size() > 0) {
                                 openElectionPopup("ccalling");
-                            }else {
+                            } else {
                                 Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                                 checkAndCallApi();
                             }
-                        }else{
+                        } else {
                             Toast.makeText(SplashActivity.this, "Access is denied !", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }else {
+                } else {
+                    Toast.makeText(SplashActivity.this,
+                            "No Active Internet Connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        karhitcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                callRecordx.stopCallReceiver();
+                if (new CheckConnection(SplashActivity.this).isNetworkConnected()) {
+                    if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                        Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        if (arrayList.size() > 0) {
+                            openElectionPopup("KKHT");
+                        } else {
+                            Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
+                            checkAndCallApi();
+                        }
+                    }
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -299,21 +321,19 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(arrayList.size()>0) {
+                    } else {
+                        if (arrayList.size() > 0) {
                             openElectionPopup("round1");
-                        }else {
+                        } else {
                             Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                             checkAndCallApi();
                         }
                         //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -330,21 +350,19 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(arrayList.size()>0) {
+                    } else {
+                        if (arrayList.size() > 0) {
                             openElectionPopup("round2");
-                        }else {
+                        } else {
                             Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                             checkAndCallApi();
                         }
                         //startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -360,20 +378,18 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(arrayList.size()>0) {
+                    } else {
+                        if (arrayList.size() > 0) {
                             openElectionPopup("round3");
-                        }else {
+                        } else {
                             Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                             checkAndCallApi();
                         }
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -390,25 +406,23 @@ public class SplashActivity extends AppCompatActivity {
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE,Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                         Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if(SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Social Media") ||
+                    } else {
+                        if (SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Social Media") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Admin and Other") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Manager") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Software Developer") ||
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("CEO/Director") ||
-                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Sr Manager")){
-                            Intent intent = new Intent(SplashActivity.this,WardWiseBirthdayImageList.class);
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Sr Manager")) {
+                            Intent intent = new Intent(SplashActivity.this, WardWiseBirthdayImageList.class);
                             startActivity(intent);
-                        }else{
+                        } else {
                             Toast.makeText(SplashActivity.this, "Access is denied !", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }else {
+                } else {
                     Toast.makeText(SplashActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -429,7 +443,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<DefaultResponse> call1, Response<DefaultResponse> response) {
                 DefaultResponse res = response.body();
-                if(res.isError()) {
+                if (res.isError()) {
                     SharedPrefManager.getInstance(SplashActivity.this).clear();
                     Toast.makeText(SplashActivity.this, res.getErrormsg(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(SplashActivity.this, LoginAcivity.class);
@@ -448,7 +462,7 @@ public class SplashActivity extends AppCompatActivity {
     private void checkAndCallApi() {
         if (new CheckConnection(SplashActivity.this).isNetworkConnected()) {
             getSpinnersData();
-        }else{
+        } else {
             Snackbar snackbar = Snackbar
                     .make(activity_splash, "No Internet", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Re Try", new View.OnClickListener() {
@@ -491,24 +505,26 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    if (SharedPrefManager.getInstance(SplashActivity.this).addElectionName(spinresponse1.getSelectedItem().toString())) {
-                        dialog.dismiss();
-                        if(type.equalsIgnoreCase("QC")){
-                            startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
-                        }else if(type.equalsIgnoreCase("MQC")){
-                            startActivity(new Intent(SplashActivity.this, OtherQCSocietyList.class));
-                        }else if(type.equalsIgnoreCase("iconnect")){
-                            startActivity(new Intent(SplashActivity.this, IConnectQCActivity.class));
-                        }else if(type.equalsIgnoreCase("round1")){
-                            startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round1"));
-                        }else if(type.equalsIgnoreCase("round2")){
-                            startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round2"));
-                        }else if(type.equalsIgnoreCase("round3")){
-                            startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round3"));
-                        }else if(type.equalsIgnoreCase("ccalling")){
-                            startActivity(new Intent(SplashActivity.this, ClientCallingActivity.class));
-                        }
+                if (SharedPrefManager.getInstance(SplashActivity.this).addElectionName(spinresponse1.getSelectedItem().toString())) {
+                    dialog.dismiss();
+                    if (type.equalsIgnoreCase("QC")) {
+                        startActivity(new Intent(SplashActivity.this, SocietyListOfQC.class));
+                    } else if (type.equalsIgnoreCase("MQC")) {
+                        startActivity(new Intent(SplashActivity.this, OtherQCSocietyList.class));
+                    } else if (type.equalsIgnoreCase("iconnect")) {
+                        startActivity(new Intent(SplashActivity.this, IConnectQCActivity.class));
+                    } else if (type.equalsIgnoreCase("round1")) {
+                        startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round1"));
+                    } else if (type.equalsIgnoreCase("round2")) {
+                        startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round2"));
+                    } else if (type.equalsIgnoreCase("round3")) {
+                        startActivity(new Intent(SplashActivity.this, RoundWiseQCActivity.class).putExtra("roundno", "round3"));
+                    } else if (type.equalsIgnoreCase("ccalling")) {
+                        startActivity(new Intent(SplashActivity.this, ClientCallingActivity.class));
+                    } else if (type.equalsIgnoreCase("KKHT")) {
+                        startActivity(new Intent(SplashActivity.this, KaryakartaHitchintakActivity.class));
                     }
+                }
             }
         });
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -519,9 +535,8 @@ public class SplashActivity extends AppCompatActivity {
         dialog.getWindow().setAttributes(lp);
     }
 
-    private void initializeDB()
-    {
-        SQLiteDatabase dbvoter = null ;
+    private void initializeDB() {
+        SQLiteDatabase dbvoter = null;
 
         /*try
         {
@@ -536,7 +551,7 @@ public class SplashActivity extends AppCompatActivity {
         }*/
     }
 
-    private void progressBar( String msg ) {
+    private void progressBar(String msg) {
         try {
             if (mProgressDialog == null)
                 mProgressDialog = new ProgressDialog(this);
@@ -551,12 +566,12 @@ public class SplashActivity extends AppCompatActivity {
             initializeDbTask = new InitializeDbTask();
             initializeDbTask.execute();
 
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    class InitializeDbTask extends AsyncTask<Void, Integer, Void>{
+    class InitializeDbTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -585,10 +600,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed()
-    {
-        if ( doubleBackToExitPressedOnce )
-        {
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
@@ -602,7 +615,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
@@ -625,13 +638,13 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<SpinnerResponse> call1, Response<SpinnerResponse> response) {
                 SpinnerResponse res = response.body();
                 progressBar.dismiss();
-                if(res.getElectionList().size()>0) {
+                if (res.getElectionList().size() > 0) {
                     electionlist = res.getElectionList();
-                    for (int i=0;i<electionlist.size();i++){
+                    for (int i = 0; i < electionlist.size(); i++) {
                         arrayList.add(electionlist.get(i).getElectionName());
                     }
 
-                    if(!SharedPrefManager.getInstance(SplashActivity.this).isElectionExists()) {
+                    if (!SharedPrefManager.getInstance(SplashActivity.this).isElectionExists()) {
                         SharedPrefManager.getInstance(SplashActivity.this).addElectionName(arrayList.get(0));
                     }
                     /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(SplashActivity.this, android.R.layout.simple_spinner_item, arrayList);

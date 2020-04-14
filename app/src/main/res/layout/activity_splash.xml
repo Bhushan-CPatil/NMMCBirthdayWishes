@@ -288,6 +288,32 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:id="@+id/karhitcall"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/karhitcall"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:cardElevation="@dimen/_4dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:id="@+id/imageupload"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
