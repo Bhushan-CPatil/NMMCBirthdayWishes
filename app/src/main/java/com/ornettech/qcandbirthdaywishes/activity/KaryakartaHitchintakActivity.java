@@ -15,11 +15,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +47,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ornettech.qcandbirthdaywishes.R;
 import com.ornettech.qcandbirthdaywishes.adapter.AdapterClientList;
+import com.ornettech.qcandbirthdaywishes.adapter.DefaultResponse;
 import com.ornettech.qcandbirthdaywishes.api.RetrofitClient;
 import com.ornettech.qcandbirthdaywishes.call.CallRecord;
 import com.ornettech.qcandbirthdaywishes.model.ClientListItem;
@@ -99,17 +103,19 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
     public List<DesignationMasterItem> desiglist = new ArrayList<>();
     public List<String> searchablespinner_list = new ArrayList<String>();
     public TextView soccount, roomcount;
-    public String sharedelectionname, filename = "";
+    public String sharedelectionname, filename = "", bd = "", ad = "";
     public RecyclerView rcyclr_list;
     CallRecord callRecordSurvey = null;
     long totalSize = 0;
     private DatePickerDialog fromDatePickerDialog;
     SendSMSWhatsApp sendSMSWhatsApp = new SendSMSWhatsApp();
-    private SimpleDateFormat dateFormatter, parseDate;
+    private SimpleDateFormat dateFormatter, parseDate, parseDate2, parseDateC, dateFormatterC;
     private ProgressDialog progressBar = null;
     String deleteFileName = "";
     public List<ResponseListPojoItem> responselist = new ArrayList<>();
-    String searchdate, message, ward, type, username;
+    String searchdate, message, ward, type, username, kkhicd;
+    private Uri fileUri;
+    int wardno = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +126,9 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_black);
 
+        dateFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        parseDate = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        parseDate2 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
         from = findViewById(R.id.fromdate);
         rcyclr_list = findViewById(R.id.corporatorslist);
@@ -127,7 +136,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
         spinmsgres = findViewById(R.id.spnsmsstatus);
         spnward = findViewById(R.id.spnward);
         spntype = findViewById(R.id.spntype);
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        dateFormatterC = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         sharedelectionname = SharedPrefManager.getInstance(KaryakartaHitchintakActivity.this).getElectionName();
 
         String cdate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
@@ -325,13 +334,13 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
             String edtfrom = from.getText().toString();
 
 
-            parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            parseDateC = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date startDate;
             Date endDate;
 
             try {
                 startDate = dateFormatter.parse(edtfrom);
-                String newEdtFrom = parseDate.format(startDate);
+                String newEdtFrom = parseDateC.format(startDate);
                 searchdate = newEdtFrom;
                 message = spinmsgres.getSelectedItem().toString().trim();
                 ward = spnward.getSelectedItem().toString().trim();
@@ -371,7 +380,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                 if (res.getKaryakartaHitachintakList().size() > 0) {
                     newlist = res.getKaryakartaHitachintakList();
                     desiglist = res.getDesignationMaster();
-                    for (int i=0 ; i<desiglist.size();i++){
+                    for (int i = 0; i < desiglist.size(); i++) {
                         searchablespinner_list.add(desiglist.get(i).getDesignationName());
                     }
                     setInnerAdapter(res.getKaryakartaHitachintakList());
@@ -442,7 +451,32 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                        innerHolder.piccapture.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View v) {
-                                               //todo PicUploadDialog(model.getKKHICd(), model.getSelecteddate(), model.getRemark1(), model.getRemark2());
+                                               if (model.getKKHIPhoto() != null && model.getKKHIPhoto().equalsIgnoreCase("")) {
+                                                   uploadPhoto(model.getKKHICd(), model.getWardNo());
+                                               } else {
+                                                   AlertDialog.Builder builder = new AlertDialog.Builder(KaryakartaHitchintakActivity.this);
+                                                   builder.setCancelable(true);
+                                                   builder.setTitle("New ?");
+                                                   builder.setMessage("Are you sure you want to upload new image ?");
+                                                   builder.setPositiveButton("Yes",
+                                                           new DialogInterface.OnClickListener() {
+                                                               @Override
+                                                               public void onClick(DialogInterface dialog, int which) {
+                                                                   uploadPhoto(model.getKKHICd(), model.getWardNo());
+                                                                   dialog.dismiss();
+                                                               }
+                                                           });
+                                                   builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(DialogInterface dialog, int which) {
+                                                           //do nothing
+                                                           dialog.dismiss();
+                                                       }
+                                                   });
+
+                                                   AlertDialog dialog = builder.create();
+                                                   dialog.show();
+                                               }
                                            }
                                        });
 
@@ -523,8 +557,10 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                        remark1.setText(kkhi.getRemark1());
                                        remark2.setText(kkhi.getRemark2());
 
-                                       final String bdate=kkhi.getBirthDate();
-                                       final String adate=kkhi.getAnniversaryDate();
+                                       final String bdate = kkhi.getBirthDate();
+                                       final String adate = kkhi.getAnniversaryDate();
+                                       final int KKHICd = kkhi.getKKHICd();
+                                       final String Selecteddate = kkhi.getSelecteddate();
 
                                        birthdate.setOnClickListener(new View.OnClickListener() {
                                            @Override
@@ -610,9 +646,14 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                                    @Override
                                                    public void onClick(DialogInterface dialogx, int which) {
 
-                                                       //updateRemark(dialog, corporatorcd, date, r1.getText().toString(), r2.getText().toString(), r3.getText().toString());
+                                                       updateData(dialog, fname.getText().toString(), mname.getText().toString(), lname.getText().toString(), fnamemar.getText().toString(),
+                                                               mnamemar.getText().toString(), lnamemar.getText().toString(), gender.getText().toString(), area.getText().toString(),
+                                                               areamar.getText().toString(), birthdate.getText().toString(), annidate.getText().toString(), mobilenumber1.getText().toString(),
+                                                               mobilenumber2.getText().toString(), remark1.getText().toString(), remark2.getText().toString(), searchablespinner.getSelectedItem().toString(),
+                                                               KKHICd, Selecteddate);
 
                                                    }
+
                                                });
                                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                                    @Override
@@ -629,6 +670,74 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
                                        dialog.show();
                                        dialog.getWindow().setAttributes(lp);
+                                   }
+
+                                   private void updateData(final Dialog dialog, final String fname, final String mname, final String lname, final String fnamemar, final String mnamemar, final String lnamemar, final String gender,
+                                                           final String area, final String areamar, final String birthdate, final String annidate, final String mobilenumber1, final String mobilenumber2,
+                                                           final String remark1, final String remark2, final String searchablespinner, final int KKHICd, final String Selecteddate) {
+                                       Date startDateA, startDateB;
+                                       bd = "";
+                                       ad = "";
+                                       try {
+                                           startDateB = parseDate.parse(birthdate);
+                                           startDateA = parseDate.parse(annidate);
+                                           ad = parseDate2.format(startDateA);
+                                           bd = parseDate2.format(startDateB);
+                                       } catch (Exception e) {
+                                       }
+
+                                       final ProgressDialog progressBar1 = new ProgressDialog(KaryakartaHitchintakActivity.this);
+                                       progressBar1.setCancelable(false);
+                                       progressBar1.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                       progressBar1.setMessage("Please wait...");
+                                       progressBar1.show();
+                                       Call<DefaultResponse> call1 = RetrofitClient
+                                               .getInstance().getApi().updateKKHIDateQC(fname, mname, lname, fnamemar, mnamemar, lnamemar, gender, area, areamar,
+                                                       bd, ad, mobilenumber1, mobilenumber2, remark1, remark2, searchablespinner, KKHICd, Selecteddate, username,
+                                                       type, sharedelectionname);
+                                       call1.enqueue(new Callback<DefaultResponse>() {
+                                           @Override
+                                           public void onResponse(Call<DefaultResponse> call1, Response<DefaultResponse> response) {
+                                               DefaultResponse res = response.body();
+                                               progressBar1.dismiss();
+                                               bd = "";
+                                               ad = "";
+                                               if (!res.isError()) {
+                                                   AlertDialog.Builder builder1 = new AlertDialog.Builder(KaryakartaHitchintakActivity.this);
+                                                   builder1.setCancelable(false);
+                                                   builder1.setTitle("Alert ?");
+                                                   builder1.setMessage(res.getErrormsg());
+                                                   builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(DialogInterface dialogx, int which) {
+                                                           callApi(searchdate, KaryakartaHitchintakActivity.this, message, type, ward, username);
+                                                       }
+                                                   });
+                                                   AlertDialog dialog3 = builder1.create();
+                                                   dialog3.show();
+                                                   dialog.dismiss();
+                                               } else {
+                                                   AlertDialog.Builder builder1 = new AlertDialog.Builder(KaryakartaHitchintakActivity.this);
+                                                   builder1.setCancelable(false);
+                                                   builder1.setTitle("Alert ?");
+                                                   builder1.setMessage(res.getErrormsg());
+                                                   builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(DialogInterface dialogx, int which) {
+                                                       }
+                                                   });
+                                                   AlertDialog dialog3 = builder1.create();
+                                                   dialog3.show();
+                                                   dialog.dismiss();
+                                               }
+                                           }
+
+                                           @Override
+                                           public void onFailure(Call<DefaultResponse> call1, Throwable t) {
+                                               progressBar1.dismiss();
+                                               Toast.makeText(KaryakartaHitchintakActivity.this, "Failed to update !", Toast.LENGTH_SHORT).show();
+                                           }
+                                       });
                                    }
 
                                    public void UpdateStatusDialog(final String qcstatus, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile) {
@@ -712,6 +821,12 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                    }
                                }
         );
+    }
+
+    private void uploadPhoto(int kkhiCd, int wardNo) {
+        kkhicd = Integer.toString(kkhiCd);
+        wardno = wardNo;
+        getImageFromGallery();
     }
 
     public void StartCallRecording(String filename) {
@@ -916,5 +1031,63 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void getImageFromGallery() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto, 99);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // get the file url
+        fileUri = savedInstanceState.getParcelable("file_uri");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // if the result is capturing Image
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 99) {
+            if (resultCode == RESULT_OK) {
+                fileUri = data.getData();
+                fileUri = Uri.parse(getRealPathFromURI(fileUri));
+                launchUploadActivity(fileUri);
+            } else if (requestCode == RESULT_CANCELED) {
+                Toast.makeText(getApplicationContext(),
+                        "User cancelled image selection !", Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Sorry! Failed to get image !", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+    }
+
+    private void launchUploadActivity(Uri fileUriC) {
+        Intent i = new Intent(KaryakartaHitchintakActivity.this, KKHIPhotoUploadActivity.class);
+        i.putExtra("fileUri", fileUriC.getPath());
+        i.putExtra("options", type);
+        i.putExtra("wardno", Integer.toString(wardno));
+        i.putExtra("electionname", sharedelectionname);
+        i.putExtra("kkhicd", kkhicd);
+        startActivity(i);
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+
+        // can post image
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(contentUri,
+                proj, // Which columns to return
+                null,       // WHERE clause; which rows to return (all rows)
+                null,       // WHERE clause selection arguments (none)
+                null); // Order-by clause (ascending by name)
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
     }
 }

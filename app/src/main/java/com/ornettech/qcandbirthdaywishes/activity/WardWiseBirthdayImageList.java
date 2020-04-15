@@ -81,7 +81,7 @@ public class WardWiseBirthdayImageList extends AppCompatActivity implements Gall
         error.setVisibility(View.GONE);
         corporatorlist.setVisibility(View.GONE);
 
-        setAdapter();
+        //setAdapter();
         fetchElectionNames();
 
         submit.setOnClickListener(new View.OnClickListener() {

@@ -449,5 +449,32 @@ public interface APIService {
             @Field("Ward_No") String Ward_No,
             @Field("username") String username
     );
+
+
+    @FormUrlEncoded
+    @POST("updateKKHIdata.php")
+    Call<DefaultResponse> updateKKHIDateQC(
+            @Field("fname") String fname,
+            @Field("mname") String mname,
+            @Field("lname") String lname,
+            @Field("fnamemar") String fnamemar,
+            @Field("mnamemar") String mnamemar,
+            @Field("lnamemar") String lnamemar,
+            @Field("gender") String gender,
+            @Field("area") String area,
+            @Field("areamar") String areamar,
+            @Field("birthdate") String bd,
+            @Field("annidate") String ad,
+            @Field("mobilenumber1") String mobilenumber1,
+            @Field("mobilenumber2") String mobilenumber2,
+            @Field("remark1") String remark1,
+            @Field("remark2") String remark2,
+            @Field("designation") String searchablespinner,
+            @Field("kkhicd") int kkhiCd,
+            @Field("date") String selecteddate,
+            @Field("username") String username,
+            @Field("utype") String type,
+            @Field("elecname") String sharedelectionname
+    );
 }
 
