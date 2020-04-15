@@ -47,6 +47,7 @@ import com.ornettech.qcandbirthdaywishes.adapter.AdapterClientList;
 import com.ornettech.qcandbirthdaywishes.api.RetrofitClient;
 import com.ornettech.qcandbirthdaywishes.call.CallRecord;
 import com.ornettech.qcandbirthdaywishes.model.ClientListItem;
+import com.ornettech.qcandbirthdaywishes.model.DesignationMasterItem;
 import com.ornettech.qcandbirthdaywishes.model.KKHIResponse;
 import com.ornettech.qcandbirthdaywishes.model.KaryakartaHitachintakListItem;
 import com.ornettech.qcandbirthdaywishes.model.ResponseListPojoItem;
@@ -57,6 +58,7 @@ import com.ornettech.qcandbirthdaywishes.utility.DBConnIP;
 import com.ornettech.qcandbirthdaywishes.utility.SendSMSWhatsApp;
 import com.ornettech.qcandbirthdaywishes.utility.SharedPrefManager;
 import com.ornettech.qcandbirthdaywishes.utility.Transalator;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -72,6 +74,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,38 +93,40 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
     public List<String> arrayList = new ArrayList<>();
     public List<String> arrayList1 = new ArrayList<>();
     public List<String> arrayList2 = new ArrayList<>();
-    Spinner spinmsgres,spnward,spntype;
+    Spinner spinmsgres, spnward, spntype;
     private AdapterClientList adapterClientList;
     public List<KaryakartaHitachintakListItem> newlist = new ArrayList<>();
-    public TextView soccount,roomcount;
-    public String sharedelectionname,filename = "";
+    public List<DesignationMasterItem> desiglist = new ArrayList<>();
+    public List<String> searchablespinner_list = new ArrayList<String>();
+    public TextView soccount, roomcount;
+    public String sharedelectionname, filename = "";
     public RecyclerView rcyclr_list;
     CallRecord callRecordSurvey = null;
     long totalSize = 0;
     private DatePickerDialog fromDatePickerDialog;
     SendSMSWhatsApp sendSMSWhatsApp = new SendSMSWhatsApp();
-    private SimpleDateFormat dateFormatter,parseDate;
+    private SimpleDateFormat dateFormatter, parseDate;
     private ProgressDialog progressBar = null;
-    String deleteFileName="";
+    String deleteFileName = "";
     public List<ResponseListPojoItem> responselist = new ArrayList<>();
-    String searchdate,message,ward,type,username;
+    String searchdate, message, ward, type, username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_karyakarta_hitchintak);
 
-        getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFFFFF'>"+ SharedPrefManager.getInstance(KaryakartaHitchintakActivity.this).getElectionName()+" Karyakarta / Hitachintak</font>"));
+        getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFFFFF'>" + SharedPrefManager.getInstance(KaryakartaHitchintakActivity.this).getElectionName() + " Karyakarta / Hitachintak</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_black);
 
 
-        from =  findViewById(R.id.fromdate);
-        rcyclr_list =  findViewById(R.id.corporatorslist);
+        from = findViewById(R.id.fromdate);
+        rcyclr_list = findViewById(R.id.corporatorslist);
         submit = findViewById(R.id.submit);
-        spinmsgres= findViewById(R.id.spnsmsstatus);
-        spnward= findViewById(R.id.spnward);
-        spntype= findViewById(R.id.spntype);
+        spinmsgres = findViewById(R.id.spnsmsstatus);
+        spnward = findViewById(R.id.spnward);
+        spntype = findViewById(R.id.spntype);
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         sharedelectionname = SharedPrefManager.getInstance(KaryakartaHitchintakActivity.this).getElectionName();
 
@@ -154,7 +159,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (new CheckConnection(KaryakartaHitchintakActivity.this).isNetworkConnected()) {
                     submitMethod(KaryakartaHitchintakActivity.this);
-                }else {
+                } else {
                     Toast.makeText(KaryakartaHitchintakActivity.this,
                             "No Active Internet Connection!",
                             Toast.LENGTH_LONG).show();
@@ -183,11 +188,11 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                 SiteAndQCResponse res = response.body();
                 progressBar.dismiss();
 
-                if(res.getResponseListPojo().size()>0) {
+                if (res.getResponseListPojo().size() > 0) {
                     responselist = res.getResponseListPojo();
                     arrayList.add("ALL");
                     arrayList.add("Pending");
-                    for (int i=0;i<responselist.size();i++){
+                    for (int i = 0; i < responselist.size(); i++) {
                         arrayList.add(responselist.get(i).getQCResponse());
                         DBConnIP.arrayListToDialog.add(responselist.get(i).getQCResponse());
                     }
@@ -210,7 +215,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                     spntype.setAdapter(adapter2);
 
 
-                }else{
+                } else {
                     Toast.makeText(KaryakartaHitchintakActivity.this, "No Site Exists !", Toast.LENGTH_LONG).show();
                 }
             }
@@ -235,17 +240,17 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
         String designation = SharedPrefManager.getInstance(KaryakartaHitchintakActivity.this).designation();
 
 
-        if(designation.equalsIgnoreCase("Software Developer") || designation.equalsIgnoreCase("Sr Manager") || designation.equalsIgnoreCase("Admin and Other") ||
-                designation.equalsIgnoreCase("CEO/Director") || designation.equalsIgnoreCase("Manager") ||  designation.equalsIgnoreCase("HR")){
+        if (designation.equalsIgnoreCase("Software Developer") || designation.equalsIgnoreCase("Sr Manager") || designation.equalsIgnoreCase("Admin and Other") ||
+                designation.equalsIgnoreCase("CEO/Director") || designation.equalsIgnoreCase("Manager") || designation.equalsIgnoreCase("HR")) {
             report2.setVisible(true);
-        }else{
+        } else {
             report2.setVisible(false);
         }
 
         report.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(KaryakartaHitchintakActivity.this,QC_Calling_Report.class));
+                startActivity(new Intent(KaryakartaHitchintakActivity.this, QC_Calling_Report.class));
                 return false;
             }
         });
@@ -253,7 +258,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
         report2.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(KaryakartaHitchintakActivity.this,QCResponseWiseReportActivity.class));
+                startActivity(new Intent(KaryakartaHitchintakActivity.this, QCResponseWiseReportActivity.class));
                 return false;
             }
         });
@@ -316,7 +321,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
     }
 
     private void submitMethod(final Context context) {
-        if(responselist.size() > 0){
+        if (responselist.size() > 0) {
             String edtfrom = from.getText().toString();
 
 
@@ -330,18 +335,18 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                 searchdate = newEdtFrom;
                 message = spinmsgres.getSelectedItem().toString().trim();
                 ward = spnward.getSelectedItem().toString().trim();
-                if(spntype.getSelectedItem().toString().trim().equalsIgnoreCase("Karyakarta")){
+                if (spntype.getSelectedItem().toString().trim().equalsIgnoreCase("Karyakarta")) {
                     type = "KK";
-                }else if(spntype.getSelectedItem().toString().trim().equalsIgnoreCase("Hitachintak")){
+                } else if (spntype.getSelectedItem().toString().trim().equalsIgnoreCase("Hitachintak")) {
                     type = "HI";
                 }
                 username = SharedPrefManager.getInstance(KaryakartaHitchintakActivity.this).username();
-                callApi(newEdtFrom,context, message, type, ward, username);
+                callApi(newEdtFrom, context, message, type, ward, username);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.toString();
             }
-        }else{
+        } else {
             getSiteAndResponse();
             Toast.makeText(context, "Loading site name list please wait !", Toast.LENGTH_SHORT).show();
         }
@@ -363,10 +368,14 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
             public void onResponse(Call<KKHIResponse> call1, Response<KKHIResponse> response) {
                 KKHIResponse res = response.body();
                 progressBar.dismiss();
-                if(res.getKaryakartaHitachintakList().size()>0) {
+                if (res.getKaryakartaHitachintakList().size() > 0) {
                     newlist = res.getKaryakartaHitachintakList();
+                    desiglist = res.getDesignationMaster();
+                    for (int i=0 ; i<desiglist.size();i++){
+                        searchablespinner_list.add(desiglist.get(i).getDesignationName());
+                    }
                     setInnerAdapter(res.getKaryakartaHitachintakList());
-                }else{
+                } else {
                     Toast.makeText(context, "No Records Exists For Selected Criteria!", Toast.LENGTH_LONG).show();
                     setInnerAdapter(res.getKaryakartaHitachintakList());
                 }
@@ -413,20 +422,20 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                            innerHolder.responsedet.setText("QC Status - " + res);
                                        }
 
-                                       innerHolder.votername.setText(model.getFullNameMar() + " - ( वॉर्ड - " + Transalator.englishDigitToMarathiDigit(model.getWardNo()+"") + ")");
+                                       innerHolder.votername.setText(model.getFullNameMar() + " - ( वॉर्ड - " + Transalator.englishDigitToMarathiDigit(model.getWardNo() + "") + ")");
                                        innerHolder.genage.setText(Transalator.englishDigitToMarathiDigit(model.getMobileNo1()));
-                                       innerHolder.socdet.setText("पद -" + model.getDesignationNameMar() );
+                                       innerHolder.socdet.setText("पद -" + model.getDesignationNameMar());
 
-                                       if(model.getKKHIPhoto() != null && !model.getKKHIPhoto().equalsIgnoreCase("")){
+                                       if (model.getKKHIPhoto() != null && !model.getKKHIPhoto().equalsIgnoreCase("")) {
                                            Glide.with(KaryakartaHitchintakActivity.this).load(model.getKKHIPhoto()).into(innerHolder.photo);
-                                       }else{
+                                       } else {
                                            innerHolder.photo.setImageDrawable(ContextCompat.getDrawable(KaryakartaHitchintakActivity.this, R.drawable.ic_no_image_found));
                                        }
 
                                        innerHolder.edit.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View v) {
-                                               //todo EditDialog(model.getKKHICd(), model.getSelecteddate(), model.getRemark1(), model.getRemark2());
+                                               EditDialog(karyakartaHitachintakListItems.get(i));
                                            }
                                        });
 
@@ -464,6 +473,163 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                        });
                                    }
 
+                                   public void EditDialog(KaryakartaHitachintakListItem karyakartaHitachintakListItemsXX) {
+                                       final Dialog dialog = new Dialog(KaryakartaHitchintakActivity.this);
+                                       dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                                       dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                       dialog.setCancelable(false);
+                                       dialog.setContentView(R.layout.kk_hi_edit_popup);
+                                       Button close = dialog.findViewById(R.id.closebtn);
+                                       Button update = dialog.findViewById(R.id.updatebtn);
+                                       final EditText fname = dialog.findViewById(R.id.fname);
+                                       final EditText mname = dialog.findViewById(R.id.mname);
+                                       final EditText lname = dialog.findViewById(R.id.lname);
+                                       final EditText fnamemar = dialog.findViewById(R.id.fnamemar);
+                                       final EditText mnamemar = dialog.findViewById(R.id.mnamemar);
+                                       final EditText lnamemar = dialog.findViewById(R.id.lnamemar);
+                                       final EditText gender = dialog.findViewById(R.id.gender);
+                                       final EditText area = dialog.findViewById(R.id.area);
+                                       final EditText areamar = dialog.findViewById(R.id.areamar);
+                                       final EditText birthdate = dialog.findViewById(R.id.birthdate);
+                                       final EditText annidate = dialog.findViewById(R.id.annidate);
+                                       final EditText mobilenumber1 = dialog.findViewById(R.id.mobilenumber1);
+                                       final EditText mobilenumber2 = dialog.findViewById(R.id.mobilenumber2);
+                                       final EditText remark1 = dialog.findViewById(R.id.remark1);
+                                       final EditText remark2 = dialog.findViewById(R.id.remark2);
+                                       final SearchableSpinner searchablespinner = dialog.findViewById(R.id.searchablespinner);
+                                       KaryakartaHitachintakListItem kkhi = karyakartaHitachintakListItemsXX;
+
+                                       ArrayAdapter<String> adapterx = new ArrayAdapter<String>(KaryakartaHitchintakActivity.this, android.R.layout.simple_spinner_dropdown_item, searchablespinner_list);
+                                       searchablespinner.setAdapter(adapterx);
+                                       if (kkhi.getDesignationName() != null && !kkhi.getDesignationName().equalsIgnoreCase("")) {
+                                           int spinnerPosition = adapterx.getPosition(kkhi.getDesignationName());
+                                           searchablespinner.setSelection(spinnerPosition);
+                                       }
+                                       fname.setText(kkhi.getFirstName());
+                                       mname.setText(kkhi.getMiddleName());
+                                       lname.setText(kkhi.getLastName());
+                                       fnamemar.setText(kkhi.getFirstNameMar());
+                                       mnamemar.setText(kkhi.getMiddleNameMar());
+                                       lnamemar.setText(kkhi.getLastNameMar());
+                                       gender.setText(kkhi.getGender());
+                                       area.setText(kkhi.getArea());
+                                       areamar.setText(kkhi.getAreaMar());
+                                       birthdate.setText(kkhi.getBirthDate());
+                                       birthdate.setFocusable(false);
+                                       annidate.setText(kkhi.getAnniversaryDate());
+                                       annidate.setFocusable(false);
+                                       mobilenumber1.setText(kkhi.getMobileNo1());
+                                       mobilenumber2.setText(kkhi.getMobileNo2());
+                                       remark1.setText(kkhi.getRemark1());
+                                       remark2.setText(kkhi.getRemark2());
+
+                                       final String bdate=kkhi.getBirthDate();
+                                       final String adate=kkhi.getAnniversaryDate();
+
+                                       birthdate.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               try {
+                                                   int mYear, mMonth, mDay;
+                                                   if (bdate.length() > 0) {
+                                                       DateFormat dateFormater = new SimpleDateFormat("dd-MM-yyyy");
+                                                       Date date = dateFormater.parse(bdate);
+                                                       final Calendar cal = Calendar.getInstance();
+                                                       cal.setTime(date);
+                                                       mYear = cal.get(Calendar.YEAR);
+                                                       mMonth = cal.get(Calendar.MONTH);
+                                                       mDay = cal.get(Calendar.DAY_OF_MONTH);
+                                                   } else {
+                                                       final Calendar c = Calendar.getInstance();
+                                                       mYear = c.get(Calendar.YEAR); // current year
+                                                       mMonth = c.get(Calendar.MONTH); // current month
+                                                       mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                                                   }
+                                                   fromDatePickerDialog = new DatePickerDialog(KaryakartaHitchintakActivity.this,
+                                                           new DatePickerDialog.OnDateSetListener() {
+                                                               @Override
+                                                               public void onDateSet(DatePicker view, int year,
+                                                                                     int monthOfYear, int dayOfMonth) {
+                                                                   birthdate.setText(String.format("%02d", dayOfMonth) + "-" + String.format("%02d", (monthOfYear + 1)) + "-" + year);
+                                                               }
+                                                           }, mYear, mMonth, mDay);
+                                                   fromDatePickerDialog.show();
+                                               } catch (Exception e) {
+                                               }
+                                           }
+                                       });
+
+                                       annidate.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               try {
+                                                   int mYear, mMonth, mDay;
+                                                   if (bdate.length() > 0) {
+                                                       DateFormat dateFormater = new SimpleDateFormat("dd-MM-yyyy");
+                                                       Date date = dateFormater.parse(adate);
+                                                       final Calendar cal = Calendar.getInstance();
+                                                       cal.setTime(date);
+                                                       mYear = cal.get(Calendar.YEAR);
+                                                       mMonth = cal.get(Calendar.MONTH);
+                                                       mDay = cal.get(Calendar.DAY_OF_MONTH);
+                                                   } else {
+                                                       final Calendar c = Calendar.getInstance();
+                                                       mYear = c.get(Calendar.YEAR); // current year
+                                                       mMonth = c.get(Calendar.MONTH); // current month
+                                                       mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                                                   }
+                                                   fromDatePickerDialog = new DatePickerDialog(KaryakartaHitchintakActivity.this,
+                                                           new DatePickerDialog.OnDateSetListener() {
+                                                               @Override
+                                                               public void onDateSet(DatePicker view, int year,
+                                                                                     int monthOfYear, int dayOfMonth) {
+                                                                   annidate.setText(String.format("%02d", dayOfMonth) + "-" + String.format("%02d", (monthOfYear + 1)) + "-" + year);
+                                                               }
+                                                           }, mYear, mMonth, mDay);
+                                                   fromDatePickerDialog.show();
+                                               } catch (Exception e) {
+                                               }
+                                           }
+                                       });
+
+                                       close.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               dialog.dismiss();
+                                           }
+                                       });
+
+                                       update.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               AlertDialog.Builder builder = new AlertDialog.Builder(KaryakartaHitchintakActivity.this);
+                                               builder.setCancelable(false);
+                                               builder.setTitle("Update ?");
+                                               builder.setMessage("Are you sure want to update ?");
+                                               builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(DialogInterface dialogx, int which) {
+
+                                                       //updateRemark(dialog, corporatorcd, date, r1.getText().toString(), r2.getText().toString(), r3.getText().toString());
+
+                                                   }
+                                               });
+                                               builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(DialogInterface dialogx, int which) {
+                                                   }
+                                               });
+                                               AlertDialog dialog2 = builder.create();
+                                               dialog2.show();
+                                           }
+                                       });
+                                       WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                       lp.copyFrom(dialog.getWindow().getAttributes());
+                                       lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                       lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                       dialog.show();
+                                       dialog.getWindow().setAttributes(lp);
+                                   }
 
                                    public void UpdateStatusDialog(final String qcstatus, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile) {
                                        final Dialog dialog = new Dialog(KaryakartaHitchintakActivity.this);
@@ -597,10 +763,10 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
     public void updateQCResponse(final Dialog dialog, final String selspinresponse, final int corporatorcd, final String date, final int wardno, final int kkhicd, final String mobile) {
         StopCallRecording();
         deleteFileName = "";
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SurveyCallRecords/ClientQCRecord_" + kkhicd + "_" + sharedelectionname + "_" + mobile+".m4a";
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SurveyCallRecords/ClientQCRecord_" + kkhicd + "_" + sharedelectionname + "_" + mobile + ".m4a";
         File newfile = new File(filePath);
-        if(newfile.exists()){
-            Log.d("file exists--->","true");
+        if (newfile.exists()) {
+            Log.d("file exists--->", "true");
             deleteFileName = filePath;
 
         }
@@ -627,7 +793,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
             // Making progress bar visible
             //progressBar.setVisibility(View.VISIBLE);
             // updating progress bar value
-            progressBar.setMessage("Uploading data to server.....("+progress[0]+" %)");
+            progressBar.setMessage("Uploading data to server.....(" + progress[0] + " %)");
             // updating percentage value
             //txtPercentage.setText(String.valueOf(progress[0]) + "%");
         }
@@ -662,7 +828,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                 entity.addPart("usertype", new StringBody(utype));
                 entity.addPart("callstatus", new StringBody(callingresponse));
 
-                if(filePath != null && !filePath.equalsIgnoreCase("")) {
+                if (filePath != null && !filePath.equalsIgnoreCase("")) {
                     deleteFileName = filePath;
                     File sourceFile = new File(filePath);
                     if (sourceFile.exists()) {
@@ -696,13 +862,13 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("----->",result);
+            Log.d("----->", result);
             progressBar.dismiss();
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 totalSize = 0;
                 if (!jsonObject.getBoolean("error")) {
-                    if(jsonObject.getString("errormsg").equalsIgnoreCase("Entry Update Successfully.")) {
+                    if (jsonObject.getString("errormsg").equalsIgnoreCase("Entry Update Successfully.")) {
                         if (deleteFileName != null && !deleteFileName.equalsIgnoreCase("")) {
                             File fdelete = new File(deleteFileName);
                             if (fdelete.exists()) {
