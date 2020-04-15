@@ -339,7 +339,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
             Date endDate;
 
             try {
-                startDate = dateFormatter.parse(edtfrom);
+                startDate = dateFormatterC.parse(edtfrom);
                 String newEdtFrom = parseDateC.format(startDate);
                 searchdate = newEdtFrom;
                 message = spinmsgres.getSelectedItem().toString().trim();
