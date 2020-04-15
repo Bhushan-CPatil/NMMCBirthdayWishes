@@ -135,7 +135,7 @@ public class KKHIPhotoUploadActivity extends AppCompatActivity {
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(RetrofitClient.BASE_URL + "birthDayWishImageUpload.php");
+            HttpPost httppost = new HttpPost(RetrofitClient.BASE_URL + "KKHIImageUpload.php");
 
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
