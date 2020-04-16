@@ -27,7 +27,7 @@ android {
             signingConfig getSigningConfig()
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    project.ext { appName = "BirthdayAppAndQC_Ver_4_4" }
+                    project.ext { appName = "BirthdayAppAndQC_Ver_4_5" }
                     def newName = output.outputFileName
                     newName = newName.replace("app-", "$project.ext.appName-")
                     newName = newName.replace("-release", "")
