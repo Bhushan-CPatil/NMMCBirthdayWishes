@@ -16,4 +16,5 @@ public class DBConnIP {
     public static List<VoterCallingQCPojoItem> newlist = new ArrayList<>();
     public static boolean status;
     public static boolean updateQCResponse_status;
+    public static boolean runmethod = false;
 }

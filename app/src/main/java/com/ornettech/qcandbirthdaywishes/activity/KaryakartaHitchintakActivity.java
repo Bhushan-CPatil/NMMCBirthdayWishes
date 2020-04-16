@@ -117,6 +117,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
     private Uri fileUri;
     int wardno = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,6 +178,15 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
         });
 
         getSiteAndResponse();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(DBConnIP.runmethod){
+            DBConnIP.runmethod = false;
+            callApi(searchdate, KaryakartaHitchintakActivity.this, message, type, ward, username);
+        }
     }
 
     private void getSiteAndResponse() {
@@ -440,6 +450,30 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                        } else {
                                            innerHolder.photo.setImageDrawable(ContextCompat.getDrawable(KaryakartaHitchintakActivity.this, R.drawable.ic_no_image_found));
                                        }
+
+                                       innerHolder.photo.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View view) {
+                                               final Dialog dialog = new Dialog(KaryakartaHitchintakActivity.this);
+                                               dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                                               dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                               dialog.setCancelable(true);
+                                               dialog.setContentView(R.layout.dialog_custom_layout);
+                                               ImageView photoView = (ImageView) dialog.findViewById(R.id.imageView);
+                                               if (model.getKKHIPhoto() != null && !model.getKKHIPhoto().equalsIgnoreCase("")) {
+                                                   Glide.with(KaryakartaHitchintakActivity.this).load(model.getKKHIPhoto()).into(photoView);
+                                               } else {
+                                                   photoView.setImageResource(R.drawable.ic_no_image_found);
+                                               }
+
+                                               WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                               lp.copyFrom(dialog.getWindow().getAttributes());
+                                               lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                               lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                               dialog.show();
+                                               dialog.getWindow().setAttributes(lp);
+                                           }
+                                       });
 
                                        innerHolder.edit.setOnClickListener(new View.OnClickListener() {
                                            @Override
@@ -1067,6 +1101,7 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
     }
 
     private void launchUploadActivity(Uri fileUriC) {
+        //runmethod = true;
         Intent i = new Intent(KaryakartaHitchintakActivity.this, KKHIPhotoUploadActivity.class);
         i.putExtra("fileUri", fileUriC.getPath());
         i.putExtra("options", type);

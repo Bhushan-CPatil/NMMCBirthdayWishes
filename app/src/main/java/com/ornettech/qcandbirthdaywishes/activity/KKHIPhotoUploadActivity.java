@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ornettech.qcandbirthdaywishes.R;
 import com.ornettech.qcandbirthdaywishes.api.RetrofitClient;
 import com.ornettech.qcandbirthdaywishes.utility.AndroidMultiPartEntity;
+import com.ornettech.qcandbirthdaywishes.utility.DBConnIP;
 import com.ornettech.qcandbirthdaywishes.utility.SharedPrefManager;
 
 import org.apache.http.HttpEntity;
@@ -39,6 +40,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+
+import id.zelory.compressor.Compressor;
 
 public class KKHIPhotoUploadActivity extends AppCompatActivity {
 
@@ -88,12 +91,8 @@ public class KKHIPhotoUploadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 btnUpload.setEnabled(false);
                 // uploading the file to server
-                if(ward.getText().toString().length()>0) {
-                    new UploadFileToServer().execute();
-                }else{
-                    ward.setError("Please enter ward number.");
-                    ward.requestFocus();
-                }
+                new UploadFileToServer().execute();
+
             }
         });
     }
@@ -148,7 +147,9 @@ public class KKHIPhotoUploadActivity extends AppCompatActivity {
                         });
                 //Log.d("file path", filePath);
                 File sourceFile = new File(fileUri);
-                entity.addPart("image", new FileBody(sourceFile));
+                File compressedImageFile = new Compressor(KKHIPhotoUploadActivity.this).compressToFile(sourceFile);
+                // Adding file data to http body
+                entity.addPart("image", new FileBody(compressedImageFile));
 
                 // Extra parameters if you want to pass to server
                 entity.addPart("elecname", new StringBody(electionname));
@@ -210,8 +211,9 @@ public class KKHIPhotoUploadActivity extends AppCompatActivity {
      * Method to show alert dialog
      */
     private void showAlert(String message) {
+        DBConnIP.runmethod = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(KKHIPhotoUploadActivity.this);
-        builder.setCancelable(true);
+        builder.setCancelable(false);
         builder.setTitle("Alert ?");
         builder.setMessage(message);
         builder.setPositiveButton("OK",
