@@ -123,6 +123,9 @@ public class QC_Calling_Report extends AppCompatActivity {
         arrayList2.add("Round 1 Calling");
         arrayList2.add("Round 2 Calling");
         arrayList2.add("Round 3 Calling");
+        arrayList2.add("Client Calling");
+        arrayList2.add("Karyakarta Calling");
+        arrayList2.add("Hitachintak Calling");
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(QC_Calling_Report.this, android.R.layout.simple_spinner_item, arrayList2);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -182,6 +185,12 @@ public class QC_Calling_Report extends AppCompatActivity {
                 reporttype = "R2";
             }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Round 3 Calling")) {
                 reporttype = "R3";
+            }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Client Calling")) {
+                reporttype = "CC";
+            }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Karyakarta Calling")) {
+                reporttype = "KK";
+            }else if(spnreptype.getSelectedItem().toString().equalsIgnoreCase("Hitachintak Calling")) {
+                reporttype = "HI";
             }
             callApi(repdate.getText().toString(), spnsitename.getSelectedItem().toString().trim());
         }else{
@@ -272,14 +281,29 @@ public class QC_Calling_Report extends AppCompatActivity {
                     }
                     sb.append("*Calling Date* : "+repdate+" \n");
                     sb.append("*Ward No.* : "+concateWard.toString()+" \n");
-                    sb.append("*Site Name* : "+concateSiteName.toString()+" \n");
+                    if(reporttype.equalsIgnoreCase("QC")
+                            || reporttype.equalsIgnoreCase("R1")
+                            || reporttype.equalsIgnoreCase("BD")
+                            || reporttype.equalsIgnoreCase("R2")
+                            || reporttype.equalsIgnoreCase("R3")) {
+                        sb.append("*Site Name* : "+concateSiteName.toString()+" \n");
+                    }else{
+                        sb.append("*Election Name* : "+concateSiteName.toString()+" \n");
+                    }
+
                     if(reporttype.equalsIgnoreCase("QC")
                             || reporttype.equalsIgnoreCase("R1")
                             || reporttype.equalsIgnoreCase("R2")
                             || reporttype.equalsIgnoreCase("R3")) {
-                        sb.append("*Data Call QC* : \n");
-                    }else{
-                        sb.append("*Data Birthday Calls* : \n");
+                        sb.append("*Survey Call Data* : \n");
+                    }else if(reporttype.equalsIgnoreCase("BD")){
+                        sb.append("*Birthday Calls Data* : \n");
+                    }else if(reporttype.equalsIgnoreCase("CC")){
+                        sb.append("*Client Calls Data* : \n");
+                    }else if(reporttype.equalsIgnoreCase("KK")){
+                        sb.append("*Karyakarta Calls Data* : \n");
+                    }else if(reporttype.equalsIgnoreCase("HI")){
+                        sb.append("*Hitchintak Calls Data* : \n");
                     }
 
                     for (HashMap.Entry<String,Integer> entry : hm.entrySet()) {
