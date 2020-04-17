@@ -87,7 +87,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
     public List<String> smsbreak = new ArrayList<>();
     public List<QCResposeWiseReportItem> newlist = new ArrayList<>();
     public String txtresponse, elename, qcres, qcexe, calldate;
-    String header="",footer="";
+    String header="",footer="",reptype="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +148,8 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                         }else if(selreptype.equalsIgnoreCase("Hitachintak Calling")) {
                             selreptype = "HI";
                         }
+
+                        reptype = selreptype;
 
                         callAPI(SharedPrefManager.getInstance(QCResponseWiseReportActivity.this).username(),
                                 SharedPrefManager.getInstance(QCResponseWiseReportActivity.this).getElectionName(), spnexecutive.getSelectedItem().toString(),
@@ -248,7 +250,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
         getSpinnersData();
     }
 
-    private void callAPI(final String username, final String electionname, final String executivename, final String responsename, final String callingdate, String selreptype, final String ward) {
+    private void callAPI(final String username, final String electionname, final String executivename, final String responsename, final String callingdate, final String selreptype, final String ward) {
         newlist.clear();
         smsbreak.clear();
         error.setVisibility(View.GONE);
@@ -283,15 +285,33 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                     sb.append(" \n");
                     for (int i=0;i<newlist.size();i++) {
                         int x = i+1;
-                        sb.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getVtype()+") \n");
-                        sb.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
-                        sb.append("    *Society Name* - "+newlist.get(i).getSocietyName()+" \n");
-                        sb.append("    *Room No.* - "+newlist.get(i).getRoomNo()+" \n");
-                        sb.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
-                        sb.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
-                        sb.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
-                        sb.append("    *Survey Date* - "+newlist.get(i).getSurveyDate()+" \n");
-                        sb.append("    *Survey By* - "+newlist.get(i).getExecutiveName()+" \n");
+
+                        if(selreptype.equalsIgnoreCase("QC")
+                                || selreptype.equalsIgnoreCase("R1")
+                                || selreptype.equalsIgnoreCase("BD")
+                                || selreptype.equalsIgnoreCase("R2")
+                                || selreptype.equalsIgnoreCase("R3")){
+                            sb.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getVtype()+") \n");
+                            sb.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                            sb.append("    *Society Name* - "+newlist.get(i).getSocietyName()+" \n");
+                            sb.append("    *Room No.* - "+newlist.get(i).getRoomNo()+" \n");
+                            sb.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
+                            sb.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
+                            sb.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
+                            sb.append("    *Survey Date* - "+newlist.get(i).getSurveyDate()+" \n");
+                            sb.append("    *Survey By* - "+newlist.get(i).getExecutiveName()+" \n");
+                        }else if(selreptype.equalsIgnoreCase("CC")
+                                || selreptype.equalsIgnoreCase("KK")
+                                || selreptype.equalsIgnoreCase("HI")){
+                            sb.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getRoomNo()+") \n");
+                            sb.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                            sb.append("    *Area Name* - "+newlist.get(i).getSocietyName()+" \n");
+                            sb.append("    *Designation* - "+newlist.get(i).getVtype()+" \n");
+                            sb.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
+                            sb.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
+                            sb.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
+                        }
+
                         sb.append(" \n");
                     }
                     whatsappsms.setText(sb.toString());
@@ -316,15 +336,31 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                     for(int i=0;i<newlist.size();i++){
                         int x = i+1;
                         //sb2.append(i+". "+birthdays.get(k).getFullName()+" - "+birthdays.get(k).getMobileNo()+"\n");
-                        sb2.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getVtype()+") \n");
-                        sb2.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
-                        sb2.append("    *Society Name* - "+newlist.get(i).getSocietyName()+" \n");
-                        sb2.append("    *Room No.* - "+newlist.get(i).getRoomNo()+" \n");
-                        sb2.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
-                        sb2.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
-                        sb2.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
-                        sb2.append("    *Survey Date* - "+newlist.get(i).getSurveyDate()+" \n");
-                        sb2.append("    *Survey By* - "+newlist.get(i).getExecutiveName()+" \n");
+                        if(selreptype.equalsIgnoreCase("QC")
+                                || selreptype.equalsIgnoreCase("R1")
+                                || selreptype.equalsIgnoreCase("BD")
+                                || selreptype.equalsIgnoreCase("R2")
+                                || selreptype.equalsIgnoreCase("R3")){
+                            sb2.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getVtype()+") \n");
+                            sb2.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                            sb2.append("    *Society Name* - "+newlist.get(i).getSocietyName()+" \n");
+                            sb2.append("    *Room No.* - "+newlist.get(i).getRoomNo()+" \n");
+                            sb2.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
+                            sb2.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
+                            sb2.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
+                            sb2.append("    *Survey Date* - "+newlist.get(i).getSurveyDate()+" \n");
+                            sb2.append("    *Survey By* - "+newlist.get(i).getExecutiveName()+" \n");
+                        }else if(selreptype.equalsIgnoreCase("CC")
+                                || selreptype.equalsIgnoreCase("KK")
+                                || selreptype.equalsIgnoreCase("HI")){
+                            sb2.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getRoomNo()+") \n");
+                            sb2.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                            sb2.append("    *Area Name* - "+newlist.get(i).getSocietyName()+" \n");
+                            sb2.append("    *Designation.* - "+newlist.get(i).getVtype()+" \n");
+                            sb2.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
+                            sb2.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
+                            sb2.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
+                        }
                         sb2.append(" \n");
                         if(x%10==0){
                             smsbreak.add(sb2.toString());
@@ -506,21 +542,27 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
             //Excel sheet name. 0 represents first sheet
             WritableSheet sheet = workbook.createSheet("QC_Report", 0);
             // column and row
-            sheet.addCell(new Label(0, 0, "NAME"));
-            sheet.addCell(new Label(1, 0, "MOBILE NO"));
-            sheet.addCell(new Label(2, 0, "SOCIETY NAME"));
-            sheet.addCell(new Label(3, 0, "ROOM NO"));
-            sheet.addCell(new Label(4, 0, "Ward NO"));
-            sheet.addCell(new Label(5, 0, "SURVEY DATE"));
-            sheet.addCell(new Label(6, 0, "SURVEY BY"));
-            sheet.addCell(new Label(7, 0, "ELECTION NAME"));
-            sheet.addCell(new Label(8, 0, "QC RESPONSE"));
-            sheet.addCell(new Label(9, 0, "QC CALLING EXE."));
-            sheet.addCell(new Label(10, 0, "CALLING DATE"));
-            sheet.addCell(new Label(11, 0, "Voter / Non-Voter"));
+            if(reptype.equalsIgnoreCase("QC")
+                    || reptype.equalsIgnoreCase("R1")
+                    || reptype.equalsIgnoreCase("BD")
+                    || reptype.equalsIgnoreCase("R2")
+                    || reptype.equalsIgnoreCase("R3")){
 
-            for (int k=0;k<newlist.size();k++) {
-                QCResposeWiseReportItem model = newlist.get(k);
+                sheet.addCell(new Label(0, 0, "NAME"));
+                sheet.addCell(new Label(1, 0, "MOBILE NO"));
+                sheet.addCell(new Label(2, 0, "SOCIETY NAME"));
+                sheet.addCell(new Label(3, 0, "ROOM NO"));
+                sheet.addCell(new Label(4, 0, "Ward NO"));
+                sheet.addCell(new Label(5, 0, "SURVEY DATE"));
+                sheet.addCell(new Label(6, 0, "SURVEY BY"));
+                sheet.addCell(new Label(7, 0, "ELECTION NAME"));
+                sheet.addCell(new Label(8, 0, "QC RESPONSE"));
+                sheet.addCell(new Label(9, 0, "QC CALLING EXE."));
+                sheet.addCell(new Label(10, 0, "CALLING DATE"));
+                sheet.addCell(new Label(11, 0, "Voter / Non-Voter"));
+
+                for (int k=0;k<newlist.size();k++) {
+                    QCResposeWiseReportItem model = newlist.get(k);
                     int i = k + 1;
                     sheet.addCell(new Label(0, i, model.getFullName()));
                     sheet.addCell(new Label(1, i, model.getMobileNo()));
@@ -534,7 +576,39 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                     sheet.addCell(new Label(9, i, model.getQCByUser()));
                     sheet.addCell(new Label(10, i, model.getQC_Calling_UpdatedDate()));
                     sheet.addCell(new Label(11, i, model.getVtype()));
+                }
+
+            }else if(reptype.equalsIgnoreCase("CC")
+                    || reptype.equalsIgnoreCase("KK")
+                    || reptype.equalsIgnoreCase("HI")){
+
+                sheet.addCell(new Label(0, 0, "NAME"));
+                sheet.addCell(new Label(1, 0, "MOBILE NO"));
+                sheet.addCell(new Label(2, 0, "AREA NAME"));
+                sheet.addCell(new Label(3, 0, "DESIGNATION"));
+                sheet.addCell(new Label(4, 0, "Ward NO"));
+                sheet.addCell(new Label(5, 0, "ELECTION NAME"));
+                sheet.addCell(new Label(6, 0, "QC RESPONSE"));
+                sheet.addCell(new Label(7, 0, "QC CALLING EXE."));
+                sheet.addCell(new Label(8, 0, "CALLING DATE"));
+
+                for (int k=0;k<newlist.size();k++) {
+                    QCResposeWiseReportItem model = newlist.get(k);
+                    int i = k + 1;
+                    sheet.addCell(new Label(0, i, model.getFullName()));
+                    sheet.addCell(new Label(1, i, model.getMobileNo()));
+                    sheet.addCell(new Label(2, i, model.getSocietyName()));
+                    sheet.addCell(new Label(3, i, model.getVtype()));
+                    sheet.addCell(new Label(4, i, ""+model.getWardNo()));
+                    sheet.addCell(new Label(5, i, elename));
+                    sheet.addCell(new Label(6, i, model.getQCResponse()));
+                    sheet.addCell(new Label(7, i, model.getQCByUser()));
+                    sheet.addCell(new Label(8, i, model.getQC_Calling_UpdatedDate()));
+                }
+
             }
+
+
 
             //closing cursor
             workbook.write();
