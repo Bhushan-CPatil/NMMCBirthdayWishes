@@ -23,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.KKHIPhotoUploadActivity"></activity>
+        <activity android:name=".activity.AudioPlayerActivity"></activity>
+        <activity android:name=".activity.AudioFilesActivity" />
+        <activity android:name=".activity.KKHIPhotoUploadActivity" />
         <activity android:name=".activity.KaryakartaHitchintakActivity" />
         <activity android:name=".activity.ClientCallingActivity" />
         <activity

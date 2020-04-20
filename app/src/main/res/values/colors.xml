@@ -48,6 +48,18 @@
     <color name="colorLightRed">#FF5555</color>
     <color name="colorveryLightRed">#FFDADA</color>
     <color name="colorveryLightGreen">#CBFDCD</color>
+    <color name="overlay_dark_50">#80000000</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
+    <color name="red_500">#F44336</color>
 
+
+    <color name="seekbar_bg">#141414</color>
+    <color name="seekbar_progress">#a53130</color>
+    <color name="seekbar_sec_progress">#875e5e</color>
+    <color name="overlay_dark_60">#99000000</color>
 
 </resources>

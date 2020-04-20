@@ -322,6 +322,30 @@
                 />
 
         </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:cardElevation="@dimen/_4dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/audiofiles"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:text="@string/audiofiles"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                />
+
+        </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/powerdby"
             android:layout_width="match_parent"

@@ -24,4 +24,5 @@
     <string name="clientcall">Client Calling</string>
     <string name="logout">Logout</string>
     <string name="karhitcall">Karyakarta / Hitachintak Calling</string>
+    <string name="audiofiles">Audio Recordings</string>
 </resources>

@@ -50,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
     ProgressDialog mProgressDialog;
     InitializeDbTask initializeDbTask;
     private boolean doubleBackToExitPressedOnce = false;
-    TextView logout, birthdaytxt, qctxt, mqctxt, loogedinuser, imageupload, iconnect, clientcall, karhitcall;
+    TextView logout, birthdaytxt, qctxt, mqctxt, loogedinuser, imageupload, iconnect, clientcall, karhitcall, audiofiles;
     TextView round1, round2, round3;
     public LinearLayout activity_splash;
     public List<ElectionListItem> electionlist = new ArrayList<>();
@@ -84,6 +84,7 @@ public class SplashActivity extends AppCompatActivity {
         round3 = findViewById(R.id.round3);
         clientcall = findViewById(R.id.clientcall);
         karhitcall = findViewById(R.id.karhitcall);
+        audiofiles = findViewById(R.id.audiofiles);
 
         loogedinuser.setText("Welcome " + SharedPrefManager.getInstance(SplashActivity.this).name() + ".");
 
@@ -267,6 +268,41 @@ public class SplashActivity extends AppCompatActivity {
                                 SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Sr Manager")) {
                             if (arrayList.size() > 0) {
                                 openElectionPopup("ccalling");
+                            } else {
+                                Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
+                                checkAndCallApi();
+                            }
+                        } else {
+                            Toast.makeText(SplashActivity.this, "Access is denied !", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } else {
+                    Toast.makeText(SplashActivity.this,
+                            "No Active Internet Connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        audiofiles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                callRecordx.stopCallReceiver();
+                if (new CheckConnection(SplashActivity.this).isNetworkConnected()) {
+                    if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                        Toast.makeText(SplashActivity.this, "Grant Calling Permission First !", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Manager") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Software Developer") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("CEO/Director") ||
+                                SharedPrefManager.getInstance(SplashActivity.this).designation().equalsIgnoreCase("Sr Manager")) {
+                            if (arrayList.size() > 0) {
+                                openElectionPopup("audio");
                             } else {
                                 Toast.makeText(SplashActivity.this, "List is empty ! Please wait reloading...", Toast.LENGTH_SHORT).show();
                                 checkAndCallApi();
@@ -523,10 +559,13 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(new Intent(SplashActivity.this, ClientCallingActivity.class));
                     } else if (type.equalsIgnoreCase("KKHT")) {
                         startActivity(new Intent(SplashActivity.this, KaryakartaHitchintakActivity.class));
+                    } else if (type.equalsIgnoreCase("audio")) {
+                        startActivity(new Intent(SplashActivity.this, AudioFilesActivity.class));
                     }
                 }
             }
         });
+
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
