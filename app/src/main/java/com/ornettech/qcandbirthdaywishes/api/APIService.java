@@ -476,5 +476,16 @@ public interface APIService {
             @Field("utype") String type,
             @Field("elecname") String sharedelectionname
     );
+
+    @FormUrlEncoded
+    @POST("AudioRecordingsOfAll.php")
+    Call<QCResposeWiseReportResponse> QCResponseWiseAudio(
+            @Field("reportdate") String repdate,
+            @Field("elecname") String elecname,
+            @Field("username") String username,
+            @Field("reptype") String reptype,
+            @Field("designation") String designation,
+            @Field("executivename") String executivename
+    );
 }
 

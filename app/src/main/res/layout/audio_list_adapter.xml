@@ -76,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/colorLightRed"
+                    android:textColor="@color/colorText"
                     android:layout_marginLeft="@dimen/layout_margin_8"
                     android:singleLine="true"
                     android:ellipsize="end"
@@ -99,20 +99,20 @@
                     <ImageButton
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:id="@+id/play"
                         android:layout_margin="@dimen/layout_margin_3"
                         android:backgroundTint="#00000000"
-                        android:src="@drawable/ic_play_button"/>
+                        app:srcCompat="@drawable/ic_play_button"/>
 
-                    <ImageButton
+                    <!--<ImageButton
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:id="@+id/whatsappbtn"
                         android:layout_margin="@dimen/layout_margin_3"
                         android:backgroundTint="#00000000"
-                        android:src="@drawable/ic_whatsappsvg"/>
+                        app:srcCompat="@drawable/ic_whatsappsvg"/>-->
                 </LinearLayout>
 
             </LinearLayout>

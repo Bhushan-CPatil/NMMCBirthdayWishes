@@ -34,8 +34,19 @@ public class QCResposeWiseReportItem{
 	@SerializedName("QC_Calling_UpdatedDate")
 	private String QC_Calling_UpdatedDate;
 
+	@SerializedName("QC_Calling_Recording")
+	private String QC_Calling_Recording;
+
 	@SerializedName("Ward_No")
 	private int wardNo;
+
+	public String getQC_Calling_Recording() {
+		return QC_Calling_Recording;
+	}
+
+	public void setQC_Calling_Recording(String QC_Calling_Recording) {
+		this.QC_Calling_Recording = QC_Calling_Recording;
+	}
 
 	public String getQC_Calling_UpdatedDate() {
 		return QC_Calling_UpdatedDate;
@@ -137,7 +148,8 @@ public class QCResposeWiseReportItem{
 			",surveyDate = '" + surveyDate + '\'' + 
 			",fullName = '" + fullName + '\'' + 
 			",executiveName = '" + executiveName + '\'' + 
-			",ward_No = '" + wardNo + '\'' + 
+			",QC_Calling_Recording = '" + QC_Calling_Recording + '\'' +
+			",ward_No = '" + wardNo + '\'' +
 			",QC_Calling_UpdatedDate = '" + QC_Calling_UpdatedDate + '\'' +
 			",vtype = '" + vtype + '\'' +
 			"}";

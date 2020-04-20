@@ -1,13 +1,17 @@
 package com.ornettech.qcandbirthdaywishes.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,9 +24,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ornettech.qcandbirthdaywishes.R;
+import com.ornettech.qcandbirthdaywishes.adapter.AdapterAudioList;
 import com.ornettech.qcandbirthdaywishes.api.RetrofitClient;
 import com.ornettech.qcandbirthdaywishes.model.ExecutiveListPojoItem;
+import com.ornettech.qcandbirthdaywishes.model.QCResposeWiseReportItem;
+import com.ornettech.qcandbirthdaywishes.model.QCResposeWiseReportResponse;
 import com.ornettech.qcandbirthdaywishes.model.SpinnerResponse;
+import com.ornettech.qcandbirthdaywishes.utility.CheckConnection;
 import com.ornettech.qcandbirthdaywishes.utility.SharedPrefManager;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +53,10 @@ public class AudioFilesActivity extends AppCompatActivity {
     public List<String> arrayList1 = new ArrayList<>();
     public List<String> arrayListRep = new ArrayList<>();
     Spinner spnexecutive,spinreptype;
+    public String reptype="";
+    public List<QCResposeWiseReportItem> newlist = new ArrayList<>();
+    public AdapterAudioList mAdapter;
+    public RecyclerView audiolist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +70,7 @@ public class AudioFilesActivity extends AppCompatActivity {
         spinreptype =  findViewById(R.id.spinreptype);
         spnexecutive =  findViewById(R.id.executivename);
         repdate =  findViewById(R.id.callingdate);
+        audiolist =  findViewById(R.id.audiolist);
 
         String cdate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         repdate.setText(cdate);
@@ -96,8 +109,101 @@ public class AudioFilesActivity extends AppCompatActivity {
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinreptype.setAdapter(adapter1);
         getSpinnersData();
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (new CheckConnection(AudioFilesActivity.this).isNetworkConnected()) {
+                    if(submitMethod()){
+                        //spnelection.getSelectedItem().toString()
+                        String selreptype = spinreptype.getSelectedItem().toString();
+                        if(selreptype.equalsIgnoreCase("QC Calling")){
+                            selreptype = "QC";
+                        }else if(selreptype.equalsIgnoreCase("Birthday Calling")) {
+                            selreptype = "BD";
+                        }else if(selreptype.equalsIgnoreCase("Round 1 Calling")) {
+                            selreptype = "R1";
+                        }else if(selreptype.equalsIgnoreCase("Round 2 Calling")) {
+                            selreptype = "R2";
+                        }else if(selreptype.equalsIgnoreCase("Round 3 Calling")) {
+                            selreptype = "R3";
+                        }else if(selreptype.equalsIgnoreCase("Client Calling")) {
+                            selreptype = "CC";
+                        }else if(selreptype.equalsIgnoreCase("Karyakarta Calling")) {
+                            selreptype = "KK";
+                        }else if(selreptype.equalsIgnoreCase("Hitachintak Calling")) {
+                            selreptype = "HI";
+                        }
+
+                        reptype = selreptype;
+
+                        callAPI(SharedPrefManager.getInstance(AudioFilesActivity.this).username(),
+                                SharedPrefManager.getInstance(AudioFilesActivity.this).getElectionName(),
+                                spnexecutive.getSelectedItem().toString(),
+                                repdate.getText().toString(),selreptype);
+                    }else{
+                        Toast.makeText(AudioFilesActivity.this, "Loading Lists please wait....", Toast.LENGTH_SHORT).show();
+                        getSpinnersData();
+                    }
+                }else {
+                    Toast.makeText(AudioFilesActivity.this,
+                            "No Active Internet Connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
+    private boolean submitMethod() {
+        if(executivelist.size() == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private void callAPI(final String username, final String electionname, final String executivename, final String callingdate,
+                         final String selreptype) {
+        newlist.clear();
+        final ProgressDialog progressBar = new ProgressDialog(AudioFilesActivity.this);
+        progressBar.setCancelable(false);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.setMessage("Please wait...");
+        progressBar.show();
+        Call<QCResposeWiseReportResponse> call1 = RetrofitClient
+                .getInstance().getApi().QCResponseWiseAudio(callingdate, electionname, username, selreptype, SharedPrefManager.getInstance(AudioFilesActivity.this).designation(), executivename);
+        call1.enqueue(new Callback<QCResposeWiseReportResponse>() {
+            @Override
+            public void onResponse(Call<QCResposeWiseReportResponse> call1, Response<QCResposeWiseReportResponse> response) {
+                QCResposeWiseReportResponse res = response.body();
+                progressBar.dismiss();
+
+                if(res.getQCResposeWiseReport() != null && res.getQCResposeWiseReport().size() > 0){
+                    newlist = res.getQCResposeWiseReport();
+                    mAdapter = new AdapterAudioList(AudioFilesActivity.this, newlist);
+                    audiolist.setNestedScrollingEnabled(false);
+                    audiolist.setLayoutManager(new LinearLayoutManager(AudioFilesActivity.this));
+                    audiolist.setAdapter(mAdapter);
+                    audiolist.getAdapter().notifyDataSetChanged();
+                }else{
+                    Toast.makeText(AudioFilesActivity.this, "No Records Exists For Selected Criteria!", Toast.LENGTH_LONG).show();
+                    mAdapter = new AdapterAudioList(AudioFilesActivity.this, newlist);
+                    audiolist.setNestedScrollingEnabled(false);
+                    audiolist.setLayoutManager(new LinearLayoutManager(AudioFilesActivity.this));
+                    audiolist.setAdapter(mAdapter);
+                    audiolist.getAdapter().notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<QCResposeWiseReportResponse> call1, Throwable t) {
+                progressBar.dismiss();
+                Toast.makeText(AudioFilesActivity.this, "Failed to fetch data !", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void getSpinnersData() {
         arrayList1.clear();
@@ -144,7 +250,7 @@ public class AudioFilesActivity extends AppCompatActivity {
         MenuItem report = menu.findItem(R.id.action_report);
         MenuItem report2 = menu.findItem(R.id.action_report2);
         MenuItem logout = menu.findItem(R.id.action_logout);
-        search.setVisible(false);
+        //search.setVisible(false);
         String designation = SharedPrefManager.getInstance(AudioFilesActivity.this).designation();
 
 
@@ -182,7 +288,26 @@ public class AudioFilesActivity extends AppCompatActivity {
             }
         });
 
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        searchView.setQueryHint("Search Here");
+        search(searchView);
+
         return true;
+    }
+
+    private void search(SearchView searchView) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
 
     @Override

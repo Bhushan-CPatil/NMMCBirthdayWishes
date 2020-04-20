@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ public class AudioPlayerActivity extends AppCompatActivity  implements View.OnCl
     private int mediaFileLengthInMilliseconds; // this value contains the song duration in milliseconds. Look at getDuration() method in MediaPlayer class
 
     private final Handler handler = new Handler();
+    private Runnable notification = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,7 @@ public class AudioPlayerActivity extends AppCompatActivity  implements View.OnCl
 
         seekBarProgress.setProgress((int) (((float) mediaPlayer.getCurrentPosition() / mediaFileLengthInMilliseconds) * 100));
         if (mediaPlayer.isPlaying()) {
-            Runnable notification = new Runnable() {
+            notification = new Runnable() {
                 public void run() {
                     primarySeekBarProgressUpdater();
                 }
@@ -95,7 +97,9 @@ public class AudioPlayerActivity extends AppCompatActivity  implements View.OnCl
             try {
                 mediaPlayer.setDataSource(audiofileURL);
                 mediaPlayer.prepare();
-
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             mediaFileLengthInMilliseconds = mediaPlayer.getDuration(); // gets the song length in milliseconds from URL
             long minutes = (mediaFileLengthInMilliseconds / 1000) / 60;
@@ -110,11 +114,8 @@ public class AudioPlayerActivity extends AppCompatActivity  implements View.OnCl
             }
 
             primarySeekBarProgressUpdater();
-            rotateImageAlbum();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Error occured while playing audio file !", Toast.LENGTH_SHORT).show();
-            }
+            //rotateImageAlbum();
+
         }
     }
 
@@ -143,7 +144,7 @@ public class AudioPlayerActivity extends AppCompatActivity  implements View.OnCl
         seekBarProgress.setSecondaryProgress(percent);
     }
 
-    private void rotateImageAlbum() {
+    /*private void rotateImageAlbum() {
         if (!mediaPlayer.isPlaying()) return;
         image.animate().setDuration(100).rotation(image.getRotation() + 2f).setListener(new AnimatorListenerAdapter() {
             @Override
@@ -152,5 +153,38 @@ public class AudioPlayerActivity extends AppCompatActivity  implements View.OnCl
                 super.onAnimationEnd(animation);
             }
         });
+    }*/
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        /*switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;*/
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(notification != null)
+        handler.removeCallbacks(notification);
+        mediaPlayer.pause();
+        mediaPlayer.release();
     }
 }
