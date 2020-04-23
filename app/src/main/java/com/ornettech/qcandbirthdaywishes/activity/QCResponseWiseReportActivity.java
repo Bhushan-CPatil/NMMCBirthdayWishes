@@ -304,8 +304,14 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                                 || selreptype.equalsIgnoreCase("KK")
                                 || selreptype.equalsIgnoreCase("HI")){
                             sb.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getRoomNo()+") \n");
-                            sb.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
-                            sb.append("    *Area Name* - "+newlist.get(i).getSocietyName()+" \n");
+                            if(selreptype.equalsIgnoreCase("CC")){
+                                sb.append("    *Contact Per. Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                                sb.append("    *Contact Person* - "+newlist.get(i).getSocietyName()+" \n");
+                            }else{
+                                sb.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                                sb.append("    *Area Name* - "+newlist.get(i).getSocietyName()+" \n");
+                            }
+
                             sb.append("    *Designation* - "+newlist.get(i).getVtype()+" \n");
                             sb.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
                             sb.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
@@ -354,8 +360,14 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                                 || selreptype.equalsIgnoreCase("KK")
                                 || selreptype.equalsIgnoreCase("HI")){
                             sb2.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getRoomNo()+") \n");
-                            sb2.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
-                            sb2.append("    *Area Name* - "+newlist.get(i).getSocietyName()+" \n");
+
+                            if(selreptype.equalsIgnoreCase("CC")){
+                                sb2.append("    *Contact Per. Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                                sb2.append("    *Contact Person* - "+newlist.get(i).getSocietyName()+" \n");
+                            }else{
+                                sb2.append("    *Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
+                                sb2.append("    *Area Name* - "+newlist.get(i).getSocietyName()+" \n");
+                            }
                             sb2.append("    *Designation.* - "+newlist.get(i).getVtype()+" \n");
                             sb2.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
                             sb2.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
@@ -583,8 +595,14 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                     || reptype.equalsIgnoreCase("HI")){
 
                 sheet.addCell(new Label(0, 0, "NAME"));
-                sheet.addCell(new Label(1, 0, "MOBILE NO"));
-                sheet.addCell(new Label(2, 0, "AREA NAME"));
+
+                if(reptype.equalsIgnoreCase("CC")){
+                    sheet.addCell(new Label(1, 0, "CONTACT PERSON MOBILE NO"));
+                    sheet.addCell(new Label(2, 0, "CONTACT PERSON"));
+                }else{
+                    sheet.addCell(new Label(1, 0, "MOBILE NO"));
+                    sheet.addCell(new Label(2, 0, "AREA NAME"));
+                }
                 sheet.addCell(new Label(3, 0, "DESIGNATION"));
                 sheet.addCell(new Label(4, 0, "Ward NO"));
                 sheet.addCell(new Label(5, 0, "ELECTION NAME"));

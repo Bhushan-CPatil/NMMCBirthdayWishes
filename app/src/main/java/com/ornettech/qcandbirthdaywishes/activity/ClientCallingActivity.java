@@ -104,7 +104,7 @@ public class ClientCallingActivity extends AppCompatActivity {
     private ProgressDialog progressBar = null;
     String deleteFileName="";
     public List<ResponseListPojoItem> responselist = new ArrayList<>();
-    String searchdate,message;
+    String searchdate,message,contact_person,contact_person_phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -360,7 +360,7 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                   @NonNull
                                                   @Override
                                                   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                                                      View view = LayoutInflater.from(ClientCallingActivity.this).inflate(R.layout.adapter_survey_voter, viewGroup, false);
+                                                      View view = LayoutInflater.from(ClientCallingActivity.this).inflate(R.layout.adapter_client_call, viewGroup, false);
                                                       InnerHolder holder = new InnerHolder(view);
                                                       return holder;
                                                   }
@@ -388,6 +388,21 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                       //innerHolder.responsedet.setText("QC Status - "+res);
 
                                                       innerHolder.votername.setText(model.getCorporatorNameMar() + " - ( वॉर्ड - " + Transalator.englishDigitToMarathiDigit(model.getWardNo()+"") + ")");
+
+                                                      if(!model.getMoblieNoPerson1().equalsIgnoreCase("")) {
+                                                          innerHolder.llt3.setVisibility(View.VISIBLE);
+                                                          innerHolder.contactp1.setText(model.getContactPerson1() + "~" + model.getMoblieNoPerson1());
+                                                      }else{
+                                                          innerHolder.llt3.setVisibility(View.GONE);
+                                                      }
+
+                                                      if(!model.getMoblieNoPerson2().equalsIgnoreCase("")) {
+                                                          innerHolder.llt4.setVisibility(View.VISIBLE);
+                                                          innerHolder.contactp2.setText(model.getContactPerson2() + "~" + model.getMoblieNoPerson2());
+                                                      }else{
+                                                          innerHolder.llt4.setVisibility(View.GONE);
+                                                      }
+
                                                       innerHolder.genage.setText(Transalator.englishDigitToMarathiDigit(model.getMobileNo1()));
                                                       innerHolder.socdet.setText("पद -" + model.getDesignationNameMar() + " ("+model.getParty()+")");
 
@@ -407,7 +422,35 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                               filename = "ClientQCRecord_" + model.getClientCd() + "_" + sharedelectionname + "_" + model.getMobileNo1();
                                                               StartCallRecording(filename);
                                                               innerHolder.llt2.setBackgroundColor(Color.parseColor("#FFDADA"));
+                                                              contact_person = model.getCorporatorName();
+                                                              contact_person_phone = model.getMobileNo1();
                                                               sendSMSWhatsApp.callMobNo(ClientCallingActivity.this, model.getMobileNo1());
+                                                              Toast.makeText(ClientCallingActivity.this, "calling", Toast.LENGTH_SHORT).show();
+                                                          }
+                                                      });
+
+                                                      innerHolder.callingbtn1.setOnClickListener(new View.OnClickListener() {
+                                                          @Override
+                                                          public void onClick(View v) {
+                                                              filename = "ClientQCRecord_" + model.getClientCd() + "_" + sharedelectionname + "_" + model.getMobileNo1();
+                                                              StartCallRecording(filename);
+                                                              innerHolder.llt3.setBackgroundColor(Color.parseColor("#FFDADA"));
+                                                              contact_person = model.getContactPerson1();
+                                                              contact_person_phone = model.getMoblieNoPerson1();
+                                                              sendSMSWhatsApp.callMobNo(ClientCallingActivity.this, model.getMoblieNoPerson1());
+                                                              Toast.makeText(ClientCallingActivity.this, "calling", Toast.LENGTH_SHORT).show();
+                                                          }
+                                                      });
+
+                                                      innerHolder.callingbtn2.setOnClickListener(new View.OnClickListener() {
+                                                          @Override
+                                                          public void onClick(View v) {
+                                                              filename = "ClientQCRecord_" + model.getClientCd() + "_" + sharedelectionname + "_" + model.getMobileNo1();
+                                                              StartCallRecording(filename);
+                                                              innerHolder.llt4.setBackgroundColor(Color.parseColor("#FFDADA"));
+                                                              contact_person = model.getContactPerson2();
+                                                              contact_person_phone = model.getMoblieNoPerson2();
+                                                              sendSMSWhatsApp.callMobNo(ClientCallingActivity.this, model.getMoblieNoPerson2());
                                                               Toast.makeText(ClientCallingActivity.this, "calling", Toast.LENGTH_SHORT).show();
                                                           }
                                                       });
@@ -423,7 +466,20 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                           @Override
                                                           public void onClick(View v) {
                                                               //StopCallRecording();
-                                                              UpdateStatusDialog(model.getQCResponse(), model.getCorporatorCd(), model.getSelecteddate(), model.getWardNo(), model.getClientCd(), model.getMobileNo1());
+                                                              List<String> arrayList2 = new ArrayList<>();
+                                                              arrayList2.clear();
+                                                              arrayList2.add("Select contact person name");
+                                                              arrayList2.add(model.getCorporatorName() + "~" + model.getMobileNo1());
+
+                                                              if(!model.getMoblieNoPerson1().equalsIgnoreCase("")) {
+                                                                  arrayList2.add(model.getContactPerson1() + "~" + model.getMoblieNoPerson1());
+                                                              }
+
+                                                              if(!model.getMoblieNoPerson2().equalsIgnoreCase("")) {
+                                                                  arrayList2.add(model.getContactPerson2() + "~" + model.getMoblieNoPerson2());
+                                                              }
+
+                                                              UpdateStatusDialog(model.getQCResponse(), model.getCorporatorCd(), model.getSelecteddate(), model.getWardNo(), model.getClientCd(), model.getMobileNo1(), arrayList2);
                                                           }
                                                       });
                                                   }
@@ -482,21 +538,32 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                       dialog.getWindow().setAttributes(lp);
                                                   }
 
-                                                  public void UpdateStatusDialog(final String qcstatus, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile) {
+                                                  public void UpdateStatusDialog(final String qcstatus, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile, final List<String> peoples) {
                                                       final Dialog dialog = new Dialog(ClientCallingActivity.this);
                                                       dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                                                       dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                                       dialog.setCancelable(false);
-                                                      dialog.setContentView(R.layout.edit_popup);
+                                                      dialog.setContentView(R.layout.edit_popup_client);
                                                       Button close = dialog.findViewById(R.id.closebtn);
                                                       Button update = dialog.findViewById(R.id.updatebtn);
                                                       final Spinner spinresponse1 = dialog.findViewById(R.id.edtspnsmsresponse);
+                                                      final Spinner calledto = dialog.findViewById(R.id.calledto);
                                                       ArrayAdapter<String> adapterx = new ArrayAdapter<String>(ClientCallingActivity.this, android.R.layout.simple_spinner_item, DBConnIP.arrayListToDialog);
                                                       adapterx.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                       spinresponse1.setAdapter(adapterx);
                                                       if (qcstatus != null && !qcstatus.equalsIgnoreCase("")) {
                                                           int spinnerPosition = adapterx.getPosition(qcstatus);
                                                           spinresponse1.setSelection(spinnerPosition);
+                                                      }
+                                                      ArrayAdapter<String> adaptery = new ArrayAdapter<String>(ClientCallingActivity.this, android.R.layout.simple_spinner_item, peoples);
+                                                      adaptery.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                      calledto.setAdapter(adaptery);
+
+                                                      String val = contact_person+"~"+contact_person_phone;
+
+                                                      if (!val.equalsIgnoreCase("~") && val.length()>11) {
+                                                          int spinnerPosition2 = adaptery.getPosition(val);
+                                                          calledto.setSelection(spinnerPosition2);
                                                       }
                                                       close.setOnClickListener(new View.OnClickListener() {
                                                           @Override
@@ -508,23 +575,28 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                       update.setOnClickListener(new View.OnClickListener() {
                                                           @Override
                                                           public void onClick(View v) {
-                                                              AlertDialog.Builder builder = new AlertDialog.Builder(ClientCallingActivity.this);
-                                                              builder.setCancelable(false);
-                                                              builder.setTitle("Update ?");
-                                                              builder.setMessage("Are you sure want to update ?");
-                                                              builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
-                                                                  @Override
-                                                                  public void onClick(DialogInterface dialogx, int which) {
-                                                                      updateQCResponse(dialog, spinresponse1.getSelectedItem().toString().trim(), corporatorcd, date, wardno, clientcd, mobile);
-                                                                  }
-                                                              });
-                                                              builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                                  @Override
-                                                                  public void onClick(DialogInterface dialogx, int which) {
-                                                                  }
-                                                              });
-                                                              AlertDialog dialog2 = builder.create();
-                                                              dialog2.show();
+                                                              if(calledto.getSelectedItem().toString().trim().equalsIgnoreCase("Select contact person name")){
+                                                                  Toast.makeText(ClientCallingActivity.this, "Please select contact person name !", Toast.LENGTH_SHORT).show();
+                                                              }else{
+                                                                  AlertDialog.Builder builder = new AlertDialog.Builder(ClientCallingActivity.this);
+                                                                  builder.setCancelable(false);
+                                                                  builder.setTitle("Update ?");
+                                                                  builder.setMessage("Are you sure want to update ?");
+                                                                  builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                                                                      @Override
+                                                                      public void onClick(DialogInterface dialogx, int which) {
+                                                                          updateQCResponse(dialog, spinresponse1.getSelectedItem().toString().trim(), corporatorcd, date, wardno, clientcd, mobile, calledto.getSelectedItem().toString().trim());
+                                                                      }
+                                                                  });
+                                                                  builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                                      @Override
+                                                                      public void onClick(DialogInterface dialogx, int which) {
+                                                                      }
+                                                                  });
+                                                                  AlertDialog dialog2 = builder.create();
+                                                                  dialog2.show();
+                                                              }
+
                                                           }
                                                       });
                                                       WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -542,20 +614,26 @@ public class ClientCallingActivity extends AppCompatActivity {
                                                   }
 
                                                   class InnerHolder extends RecyclerView.ViewHolder {
-                                                      TextView votername, genage, socdet, responsedet;
-                                                      LinearLayout llt, llt2;
-                                                      ImageButton edit, callingbtn;
+                                                      TextView votername, genage, socdet, responsedet, contactp1, contactp2;
+                                                      LinearLayout llt, llt2, llt3, llt4;
+                                                      ImageButton edit, callingbtn, callingbtn1, callingbtn2;
 
                                                       public InnerHolder(@NonNull View itemView) {
                                                           super(itemView);
                                                           llt = itemView.findViewById(R.id.llt);
                                                           llt2 = itemView.findViewById(R.id.llt2);
+                                                          llt3 = itemView.findViewById(R.id.llt3);
+                                                          llt4 = itemView.findViewById(R.id.llt4);
+                                                          contactp1 = itemView.findViewById(R.id.contactp1);
+                                                          contactp2 = itemView.findViewById(R.id.contactp2);
                                                           votername = itemView.findViewById(R.id.votername);
                                                           genage = itemView.findViewById(R.id.genage);
                                                           socdet = itemView.findViewById(R.id.socdet);
                                                           responsedet = itemView.findViewById(R.id.responsedet);
                                                           edit = itemView.findViewById(R.id.edit);
                                                           callingbtn = itemView.findViewById(R.id.callingbtn);
+                                                          callingbtn1 = itemView.findViewById(R.id.callingbtn1);
+                                                          callingbtn2 = itemView.findViewById(R.id.callingbtn2);
                                                       }
                                                   }
                                               }
@@ -661,7 +739,7 @@ public class ClientCallingActivity extends AppCompatActivity {
 
     }
 
-    public void updateQCResponse(final Dialog dialog, final String selspinresponse, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile) {
+    public void updateQCResponse(final Dialog dialog, final String selspinresponse, final int corporatorcd, final String date, final int wardno, final int clientcd, final String mobile, final String ContactPersonNameAndMobileNumber) {
         StopCallRecording();
         deleteFileName = "";
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SurveyCallRecords/ClientQCRecord_" + clientcd + "_" + sharedelectionname + "_" + mobile+".m4a";
@@ -673,7 +751,7 @@ public class ClientCallingActivity extends AppCompatActivity {
         }
 
         new UploadFileToServer().execute(selspinresponse, Integer.toString(corporatorcd), sharedelectionname, date, Integer.toString(wardno),
-                SharedPrefManager.getInstance(ClientCallingActivity.this).username(), filePath);
+                SharedPrefManager.getInstance(ClientCallingActivity.this).username(), filePath, ContactPersonNameAndMobileNumber);
         dialog.dismiss();
 
     }
@@ -710,11 +788,11 @@ public class ClientCallingActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return uploadFile(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+            return uploadFile(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
         }
 
         @SuppressWarnings("deprecation")
-        private String uploadFile(String callingresponse, String corporatorcd, String elecname, String date, String wardno, String username, String filePath) {
+        private String uploadFile(String callingresponse, String corporatorcd, String elecname, String date, String wardno, String username, String filePath, String ContactPersonNameAndMobileNo) {
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
@@ -736,6 +814,7 @@ public class ClientCallingActivity extends AppCompatActivity {
                 entity.addPart("wardno", new StringBody(wardno));
                 entity.addPart("username", new StringBody(username));
                 entity.addPart("callstatus", new StringBody(callingresponse));
+                entity.addPart("calledto", new StringBody(ContactPersonNameAndMobileNo));
 
                 if(filePath != null && !filePath.equalsIgnoreCase("")) {
                     deleteFileName = filePath;
@@ -820,6 +899,9 @@ public class ClientCallingActivity extends AppCompatActivity {
                     dialog3.show();
                     //dialog.dismiss();
                 }
+
+                contact_person = "";
+                contact_person_phone = "";
 
             } catch (JSONException e) {
                 e.printStackTrace();
