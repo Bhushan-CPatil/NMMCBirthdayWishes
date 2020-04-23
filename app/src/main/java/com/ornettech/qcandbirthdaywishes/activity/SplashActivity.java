@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
     public List<ElectionListItem> electionlist = new ArrayList<>();
     public List<String> arrayList = new ArrayList<>();
     //CallRecord callRecordx;
+    public ImageView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         logout = findViewById(R.id.logout);
+        logo = findViewById(R.id.logo);
         birthdaytxt = findViewById(R.id.birthdaytxt);
         loogedinuser = findViewById(R.id.loogedinuser);
         qctxt = findViewById(R.id.qctxt);
@@ -95,6 +98,13 @@ public class SplashActivity extends AppCompatActivity {
                 Intent intent = new Intent(SplashActivity.this, LoginAcivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+            }
+        });
+
+        logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(SplashActivity.this, SharedPrefManager.getInstance(SplashActivity.this).username(), Toast.LENGTH_LONG).show();
             }
         });
 
