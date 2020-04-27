@@ -712,12 +712,22 @@ public class KaryakartaHitchintakActivity extends AppCompatActivity {
                                        Date startDateA, startDateB;
                                        bd = "";
                                        ad = "";
-                                       try {
-                                           startDateB = parseDate.parse(birthdate);
-                                           startDateA = parseDate.parse(annidate);
-                                           ad = parseDate2.format(startDateA);
-                                           bd = parseDate2.format(startDateB);
-                                       } catch (Exception e) {
+                                       if(annidate.length()>6) {
+                                           try {
+                                               startDateA = parseDate.parse(annidate);
+                                               ad = parseDate2.format(startDateA);
+                                           } catch (Exception e) {
+                                               ad = "";
+                                           }
+                                       }
+
+                                       if(birthdate.length()>6) {
+                                           try {
+                                               startDateB = parseDate.parse(birthdate);
+                                               bd = parseDate2.format(startDateB);
+                                           } catch (Exception e) {
+                                               bd = "";
+                                           }
                                        }
 
                                        final ProgressDialog progressBar1 = new ProgressDialog(KaryakartaHitchintakActivity.this);
