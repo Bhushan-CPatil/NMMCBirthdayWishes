@@ -316,7 +316,9 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                             sb.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
                             sb.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
                             sb.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
-                            sb.append("    *Remark* - "+newlist.get(i).getRoomNo()+" \n");
+                            if(newlist.get(i).getRoomNo() != null && !newlist.get(i).getRoomNo().replaceAll("\\s", "").equalsIgnoreCase("")) {
+                                sb.append("    *Remark* - " + newlist.get(i).getRoomNo() + " \n");
+                            }
                         }
 
                         sb.append(" \n");
@@ -373,7 +375,9 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                             sb2.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
                             sb2.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
                             sb2.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
-                            sb2.append("    *Remark* - "+newlist.get(i).getRoomNo()+" \n");
+                            if(newlist.get(i).getRoomNo() != null && !newlist.get(i).getRoomNo().replaceAll("\\s", "").equalsIgnoreCase("")) {
+                                sb2.append("    *Remark* - " + newlist.get(i).getRoomNo() + " \n");
+                            }
                         }
                         sb2.append(" \n");
                         if(x%10==0){
@@ -625,7 +629,11 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                     sheet.addCell(new Label(6, i, model.getQCResponse()));
                     sheet.addCell(new Label(7, i, model.getQCByUser()));
                     sheet.addCell(new Label(8, i, model.getQC_Calling_UpdatedDate()));
-                    sheet.addCell(new Label(9, i, model.getRoomNo()));
+                    if(model.getRoomNo() != null && !model.getRoomNo().replaceAll("\\s", "").equalsIgnoreCase("")) {
+                        sheet.addCell(new Label(9, i, model.getRoomNo()));
+                    }else {
+                        sheet.addCell(new Label(9, i, "Remark not given"));
+                    }
                 }
 
             }
