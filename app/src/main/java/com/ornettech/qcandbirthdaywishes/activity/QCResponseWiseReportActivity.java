@@ -303,7 +303,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                         }else if(selreptype.equalsIgnoreCase("CC")
                                 || selreptype.equalsIgnoreCase("KK")
                                 || selreptype.equalsIgnoreCase("HI")){
-                            sb.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getRoomNo()+") \n");
+                            sb.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" \n");
                             if(selreptype.equalsIgnoreCase("CC")){
                                 sb.append("    *Contact Per. Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
                                 sb.append("    *Contact Person* - "+newlist.get(i).getSocietyName()+" \n");
@@ -316,6 +316,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                             sb.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
                             sb.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
                             sb.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
+                            sb.append("    *Remark* - "+newlist.get(i).getRoomNo()+" \n");
                         }
 
                         sb.append(" \n");
@@ -359,7 +360,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                         }else if(selreptype.equalsIgnoreCase("CC")
                                 || selreptype.equalsIgnoreCase("KK")
                                 || selreptype.equalsIgnoreCase("HI")){
-                            sb2.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" ("+newlist.get(i).getRoomNo()+") \n");
+                            sb2.append("*"+x +". Name* - "+newlist.get(i).getFullName()+" \n");
 
                             if(selreptype.equalsIgnoreCase("CC")){
                                 sb2.append("    *Contact Per. Mob. No.* - "+newlist.get(i).getMobileNo()+" \n");
@@ -372,6 +373,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                             sb2.append("    *Ward No.* - "+newlist.get(i).getWardNo()+" \n");
                             sb2.append("    *QC Response.* - "+newlist.get(i).getQCResponse()+" \n");
                             sb2.append("    *QC By* - "+newlist.get(i).getQCByUser()+" \n");
+                            sb2.append("    *Remark* - "+newlist.get(i).getRoomNo()+" \n");
                         }
                         sb2.append(" \n");
                         if(x%10==0){
@@ -609,6 +611,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                 sheet.addCell(new Label(6, 0, "QC RESPONSE"));
                 sheet.addCell(new Label(7, 0, "QC CALLING EXE."));
                 sheet.addCell(new Label(8, 0, "CALLING DATE"));
+                sheet.addCell(new Label(9, 0, "REMARK"));
 
                 for (int k=0;k<newlist.size();k++) {
                     QCResposeWiseReportItem model = newlist.get(k);
@@ -622,6 +625,7 @@ public class QCResponseWiseReportActivity extends AppCompatActivity {
                     sheet.addCell(new Label(6, i, model.getQCResponse()));
                     sheet.addCell(new Label(7, i, model.getQCByUser()));
                     sheet.addCell(new Label(8, i, model.getQC_Calling_UpdatedDate()));
+                    sheet.addCell(new Label(9, i, model.getRoomNo()));
                 }
 
             }
